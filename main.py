@@ -6,13 +6,15 @@ from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from kivy.uix.popup import Popup
 from kivy.metrics import dp
+from kivy.graphics import Color, Rectangle
+from kivy.core.window import Window
 
 class MainScreen(Screen):
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
 
         layout = BoxLayout(orientation='vertical')
-        add_button = Button(text='Dodaj', size_hint=(None, None), size=(100, 50), pos_hint={'right': 0.95, 'bottom': 0.05})
+        add_button = Button(text='Dodaj', size_hint=(None, None), size=(100, 50), pos_hint={'right': 0.98, 'bottom': 0.5})
         add_button.bind(on_press=self.show_add_popup)
 
         layout.add_widget(add_button)
@@ -45,6 +47,10 @@ class ZabezpieczDusze(App):
     def build(self):
         sm = ScreenManager()
         sm.add_widget(MainScreen(name='main'))
+        with sm.get_screen('main').canvas.before:
+            Color(0x07 / 255, 0x15 / 255, 0x22 / 255)
+            self.background = Rectangle(size=(Window.width, Window.height), pos=(0, 0))
+
         return sm
 
 if __name__ == '__main__':
