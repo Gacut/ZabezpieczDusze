@@ -10,6 +10,12 @@ from kivy.graphics import Color, Rectangle, InstructionGroup, Line
 from kivy.app import App
 from kivy.uix.anchorlayout import AnchorLayout
 
+#TODO: Dorobić szukanie po słowach kluczowych
+#TODO: Funkcjonalność włączenia aparatu i nagrywanie wideo
+#TODO: Funkcjonalność dodawania notatek oraz zdjęć
+
+
+
 class NoteWidget(BoxLayout):
     def __init__(self, note_text, **kwargs):
         super(NoteWidget, self).__init__(**kwargs)
