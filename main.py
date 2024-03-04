@@ -4,17 +4,19 @@ from kivy.uix.button import Button
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
+from kivy.uix.widget import Widget
 from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle, InstructionGroup, Line
 from kivy.app import App
+from kivy.uix.anchorlayout import AnchorLayout
 
 class NoteWidget(BoxLayout):
     def __init__(self, note_text, **kwargs):
         super(NoteWidget, self).__init__(**kwargs)
         self.orientation = 'vertical'
         self.size_hint_y = None
-        self.height = 150  
-        self.padding = [30, 5]  # Odstęp widżetu notatek 30px od boków oraz 5px od kolejnego wpisu
+        self.height = 150
+        self.padding = [30, 20]   # Odstęp widżetu notatek 30px od boków oraz 5px od kolejnego wpisu
         self.add_widget(Label(text=note_text))
 
         self.bind(pos=self.update_canvas)
@@ -36,7 +38,7 @@ class MainScreen(Screen):
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
 
-        layout = BoxLayout(orientation='vertical', spacing=5, padding=[0, 20, 0, 0])
+        layout = BoxLayout(orientation='vertical', spacing=5, padding=[0, 20, 0, 0])  # Ustawiamy margines górny na 20 pikseli
 
         self.notes_layout = BoxLayout(orientation='vertical', spacing=10, size_hint_y=None)
         self.notes_layout.bind(minimum_height=self.notes_layout.setter('height'))
@@ -47,44 +49,82 @@ class MainScreen(Screen):
         scroll_view = ScrollView()
         scroll_view.add_widget(self.notes_layout)
 
-        add_button = Button(text='Dodaj', size_hint=(None, None), size=(100, 50), pos_hint={'right': 1, 'bottom': 1})
-        add_button.bind(on_press=self.show_add_popup)
+        bottom_buttons_layout = BoxLayout(size_hint=(1, None), height=50, spacing=5)
+        menu_button = Button(text='Menu', size_hint=(None, None), size=(100, 50))
+        bottom_buttons_layout.add_widget(menu_button)
+
+        # zdefiniowanie napisu "Zabezpiecz Duszę" wraz z wycentrowaniem go
+        anchor_layout = AnchorLayout(anchor_x='center')
+        anchor_layout.add_widget(Label(text='Zabezpiecz Duszę'))
+        bottom_buttons_layout.add_widget(Widget())  # Pusty widget traktuję jako odstępy aby wycentrować napis
+        bottom_buttons_layout.add_widget(anchor_layout)
+        bottom_buttons_layout.add_widget(Widget())  # Pusty widget traktuję jako odstępy aby wycentrować napis
+        add_button = Button(text='Dodaj', size_hint=(None, None), size=(100, 50), pos_hint={'right': 1})
+        bottom_buttons_layout.add_widget(add_button)
 
         layout.add_widget(scroll_view)
-        layout.add_widget(add_button)
+        layout.add_widget(bottom_buttons_layout)
 
         self.add_widget(layout)
 
+        menu_button.bind(on_press=self.show_menu_popup)
+        add_button.bind(on_press=self.show_add_popup)
+
+    def show_menu_popup(self, instance):
+        content = BoxLayout(orientation='vertical')
+        button1 = Button(text='Przycisk 1', size_hint_y=None, height=50)
+        button2 = Button(text='Przycisk 2', size_hint_y=None, height=50)
+        button3 = Button(text='Przycisk 3', size_hint_y=None, height=50)
+        close_button = Button(text='Zamknij', size_hint_y=None, height=50)
+
+        content.add_widget(button1)
+        content.add_widget(button2)
+        content.add_widget(button3)
+        content.add_widget(close_button)
+
+        popup = Popup(title='Menu', content=content, size_hint=(None, None), size=(300, 200))
+        close_button.bind(on_press=popup.dismiss)
+        popup.open()
+
     def show_add_popup(self, instance):
         content = BoxLayout(orientation='vertical')
-        add_text_button = Button(text='Dodaj notatkę tekstową', size_hint_y=None, height=50, on_press=self.add_text_note)
-        add_video_button = Button(text='Dodaj notatkę wideo', size_hint_y=None, height=50, on_press=self.add_video_note)
+        add_text_button = Button(text='Dodaj notatkę tekstową', size_hint_y=None, height=50)
+        add_video_button = Button(text='Dodaj notatkę wideo', size_hint_y=None, height=50)
         close_button = Button(text='Zamknij', size_hint_y=None, height=50)
 
         content.add_widget(add_text_button)
         content.add_widget(add_video_button)
         content.add_widget(close_button)
 
-        popup = Popup(title='Dodaj notatkę', content=content, size_hint=(None, None), size=(300, 200))
+        popup = Popup(title='Dodaj', content=content, size_hint=(None, None), size=(300, 200))
         close_button.bind(on_press=popup.dismiss)
         popup.open()
 
+
+
     def add_text_note(self, instance):
-        # TODO: Ekran dodawania notatek wraz ze zdjęciem (lub sam text)
+        # TODO: Ekran dodawania notatek wraz ze zdjęciem (lub sam text)(Raczej już jako osobny plik)
         pass
 
     def add_video_note(self, instance):
-        # TODO: Ekran dodawania notatek wideo oraz tekstu
+        # TODO: Ekran dodawania notatek wideo oraz tekstu (Raczej już jako osobny plik)
         pass
+
 
 class NoteApp(App):
     def build(self):
         sm = ScreenManager()
         sm.add_widget(MainScreen(name='main'))
 
+        # Dynamiczne aktualizowanie rozmiaru tła
+        def update_background(instance, value):
+            with sm.get_screen('main').canvas.before:
+                sm.get_screen('main').background.size = value
+        Window.bind(size=update_background)
+
         with sm.get_screen('main').canvas.before:
             Color(0x07 / 255, 0x15 / 255, 0x22 / 255)
-            self.background = Rectangle(size=(Window.width, Window.height), pos=(0, 0))
+            sm.get_screen('main').background = Rectangle(size=Window.size, pos=(0, 0))
 
         return sm
 
