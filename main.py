@@ -10,12 +10,6 @@ from kivy.graphics import Color, Rectangle, InstructionGroup, Line
 from kivy.app import App
 from kivy.uix.anchorlayout import AnchorLayout
 
-#TODO: Dorobić szukanie po słowach kluczowych
-#TODO: Funkcjonalność włączenia aparatu i nagrywanie wideo
-#TODO: Funkcjonalność dodawania notatek oraz zdjęć
-
-
-
 class NoteWidget(BoxLayout):
     def __init__(self, note_text, **kwargs):
         super(NoteWidget, self).__init__(**kwargs)
@@ -62,10 +56,9 @@ class MainScreen(Screen):
         # zdefiniowanie napisu "Zabezpiecz Duszę" wraz z wycentrowaniem go
         anchor_layout = AnchorLayout(anchor_x='center')
         anchor_layout.add_widget(Label(text='Zabezpiecz Duszę'))
-        bottom_buttons_layout.add_widget(Widget())  # Pusty widget traktuję jako odstępy aby wycentrować napis
         bottom_buttons_layout.add_widget(anchor_layout)
-        bottom_buttons_layout.add_widget(Widget())  # Pusty widget traktuję jako odstępy aby wycentrować napis
-        add_button = Button(text='Dodaj', size_hint=(None, None), size=(100, 50), pos_hint={'right': 1})
+
+        add_button = Button(size_hint=(None, None), size=(91, 79), pos_hint={'right': 1}, background_normal='grafiki/dodaj.png', background_down='grafiki/dodaj2.png')
         bottom_buttons_layout.add_widget(add_button)
 
         layout.add_widget(scroll_view)
@@ -105,17 +98,6 @@ class MainScreen(Screen):
         popup = Popup(title='Dodaj', content=content, size_hint=(None, None), size=(300, 200))
         close_button.bind(on_press=popup.dismiss)
         popup.open()
-
-
-
-    def add_text_note(self, instance):
-        # TODO: Ekran dodawania notatek wraz ze zdjęciem (lub sam text)(Raczej już jako osobny plik)
-        pass
-
-    def add_video_note(self, instance):
-        # TODO: Ekran dodawania notatek wideo oraz tekstu (Raczej już jako osobny plik)
-        pass
-
 
 class NoteApp(App):
     def build(self):
