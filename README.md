@@ -1,11 +1,16 @@
 # Zabezpiecz Duszę
 
-Aplikacja do zapisywania swojej świadomości poprzez text lub video.
+Jest to innowacyjna aplikację, która umożliwia zapisywanie swoich refleksji i doświadczeń w formie tekstowej lub wideo.
 
-Miałem od długiego czasu pomysł na aplikację w stylu dziennika wideo/tekstowego.
-Dane wprowadzane do aplikacji będą zahasłowane przez użytkownika i będą zbierane wyłacznie na urządzeniu. Żadne synchronizowanie z chmurą nie wchodzi w grę.
-Zebrane w aplikacji wpisy będzie można wyexportować na nośnik i użyć tych danych, aby wytrenować AI tak, aby zachowywała się jak użytkownik do którego dane należą.
+Projekt ten narodził się z długotrwałego marzenia o stworzeniu intymnego dziennika, który łączy w sobie formę pisemną i wizualną. 
+Dzięki aplikacji, użytkownicy mogą wprowadzać swoje dane, zabezpieczone własnym hasłem, przechowując je wyłącznie na swoim urządzeniu, z pominięciem jakiejkolwiek synchronizacji z chmurą. 
+Zebrane wpisy mogą być wyeksportowane na nośnik zewnętrzny, otwierając możliwość ich późniejszego wykorzystania, na przykład do szkolenia sztucznej inteligencji. 
 
-Po tym projekcie planuję stworzyć appkę AI dzięki której będzie można zaimportować dane z ZabezpieczDuszę i wytrenować ją tak, aby zachowywała się jak użytkownik.
+Planuję także stworzyć aplikację AI, która pozwoli na import danych z ZabezpieczDuszę i przetrenuje je tak, aby odzwierciedlała zachowania i preferencje użytkownika. 
+Ale to dopiero, gdy opanuję temat związany z AI chatbotami i modelami.
+
+
+
+
 
 
