@@ -1,6 +1,6 @@
 # Zabezpiecz Duszę
 
-Jest to innowacyjna aplikację, która umożliwia zapisywanie swoich refleksji i doświadczeń w formie tekstowej lub wideo.
+Jest to innowacyjna aplikacja, która umożliwia zapisywanie swoich refleksji i doświadczeń w formie tekstowej lub wideo.
 
 Projekt ten narodził się z długotrwałego marzenia o stworzeniu intymnego dziennika, który łączy w sobie formę pisemną i wizualną. 
 Dzięki aplikacji, użytkownicy mogą wprowadzać swoje dane, zabezpieczone własnym hasłem, przechowując je wyłącznie na swoim urządzeniu, z pominięciem jakiejkolwiek synchronizacji z chmurą. 
