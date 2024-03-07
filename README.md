@@ -10,7 +10,7 @@ Planuję także stworzyć aplikację AI, która pozwoli na import danych z Zabez
 Ale to dopiero, gdy opanuję temat związany z AI chatbotami i modelami.
 
 
-#Creditsy
+# Creditsy
 Frontend: ChatGPT (Głównie dlatego, że nie nawidzę programować frontu T_T
 Grafiki: Bing.com/create
 
