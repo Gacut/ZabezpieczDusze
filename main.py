@@ -50,7 +50,7 @@ class MainScreen(Screen):
         scroll_view.add_widget(self.notes_layout)
 
         bottom_buttons_layout = BoxLayout(size_hint=(1, None), height=50, spacing=5)
-        menu_button = Button(text='Menu', size_hint=(None, None), size=(100, 50))
+        menu_button = Button(size_hint=(None, None), size=(91, 79), background_normal='grafiki/menu.png', background_down='grafiki/meenu2.png')
         bottom_buttons_layout.add_widget(menu_button)
 
         # zdefiniowanie napisu "Zabezpiecz Duszę" wraz z wycentrowaniem go
