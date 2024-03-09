@@ -2,7 +2,7 @@
 
 Jest to innowacyjna aplikacja, która umożliwia zapisywanie swoich refleksji i doświadczeń w formie tekstowej lub wideo.
 
-Projekt ten narodził się z długotrwałego marzenia o stworzeniu intymnego dziennika, który łączy w sobie formę pisemną i wizualną. 
+Projekt ten narodził się z długotrwałego marzenia o stworzeniu dziennika, który łączy w sobie formę pisemną i wizualną (wideo/zdjęcia). 
 Dzięki aplikacji, użytkownicy mogą wprowadzać swoje dane, zabezpieczone własnym hasłem, przechowując je wyłącznie na swoim urządzeniu, z pominięciem jakiejkolwiek synchronizacji z chmurą. 
 Zebrane wpisy mogą być wyeksportowane na nośnik zewnętrzny, otwierając możliwość ich późniejszego wykorzystania, na przykład do szkolenia sztucznej inteligencji. 
 
