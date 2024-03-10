@@ -11,7 +11,7 @@ Ale to dopiero, gdy opanuję temat związany z AI chatbotami i modelami.
 
 
 # Creditsy
-Frontend: ChatGPT (Głównie dlatego, że nie nawidzę programować frontu T_T
+Frontend: ChatGPT (Głównie dlatego, że nie nawidzę programować frontu)
 
 Grafiki: Bing.com/create
 
