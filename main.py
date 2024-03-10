@@ -4,7 +4,7 @@ from kivy.uix.button import Button
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
-from kivy.uix.widget import Widget
+from kivy.uix.textinput import TextInput
 from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle, InstructionGroup, Line
 from kivy.app import App
@@ -88,8 +88,12 @@ class MainScreen(Screen):
     def show_add_popup(self, instance):
         content = BoxLayout(orientation='vertical')
         add_text_button = Button(text='Dodaj notatkę tekstową', size_hint_y=None, height=50)
+        add_text_button.bind(on_press=self.add_note_and_close_popup)
         add_video_button = Button(text='Dodaj notatkę wideo', size_hint_y=None, height=50)
         close_button = Button(text='Zamknij', size_hint_y=None, height=50)
+
+        # Dodajemy akcje przycisku "Dodaj notatkę tekstową"
+        add_text_button.bind(on_press=self.show_add_note_screen)
 
         content.add_widget(add_text_button)
         content.add_widget(add_video_button)
@@ -99,10 +103,81 @@ class MainScreen(Screen):
         close_button.bind(on_press=popup.dismiss)
         popup.open()
 
+    def add_note_and_close_popup(self, instance):
+        self.show_add_note_screen(instance)
+        # Znajdź popup "show_add_popup" i zamknij go
+        for widget in instance.walk_reverse():
+            if isinstance(widget, Popup):
+                widget.dismiss()
+                break
+
+    def show_add_note_screen(self, instance):
+        self.manager.current = 'add_note'
+
+
+#Ekran wprowadzania notateek tekstowych
+class AddNoteScreen(Screen):
+    def __init__(self, **kwargs):
+        super(AddNoteScreen, self).__init__(**kwargs)
+        
+        layout = BoxLayout(orientation='vertical', padding=20)
+
+        bottom_buttons_layout_text = BoxLayout(size_hint=(1, None), height=50, spacing=5)
+
+
+        title_label = Label(text='Tytuł notatki:')
+        self.title_input = TextInput()
+        
+        content_label = Label(text='Treść notatki:')
+        self.content_input = TextInput()
+
+        # Przycisk "Dodaj" ustawiony na prawej stronie na dole
+        self.add_button = Button(text='Dodaj', size_hint=(None, None), size=(100, 50), pos_hint={'right': 1})
+        self.add_button.bind(on_press=self.add_note)
+
+        # Przycisk "Wróć" ustawiony na lewej stronie na dole
+        back_button = Button(text='Wróć', size_hint=(None, None), size=(100, 50), pos_hint={'left': 1})
+        back_button.bind(on_press=self.go_back)
+
+        layout.add_widget(title_label)
+        layout.add_widget(self.title_input)
+        layout.add_widget(content_label)
+        layout.add_widget(self.content_input)
+        layout.add_widget(bottom_buttons_layout_text)
+
+        # Dodanie przycisków "Wróć" oraz "Dodaj" na dole ekranu
+        bottom_buttons_layout_text.add_widget(back_button)
+        anchor_layout_text = AnchorLayout(anchor_x='center')
+        bottom_buttons_layout_text.add_widget(anchor_layout_text) # Kolejny pusty widget żeby zrobić odstęp między przyciskami
+        bottom_buttons_layout_text.add_widget(self.add_button)
+
+        self.add_widget(layout)
+
+    def add_note(self, instance):
+        title = self.title_input.text
+        content = self.content_input.text
+        if title.strip() == '' or content.strip() == '':
+            popup = Popup(title='Błąd', content=Label(text='Tytuł i treść notatki nie mogą być puste.'),
+                          size_hint=(None, None), size=(300, 200))
+            popup.open()
+        else:
+            # Tutaj możesz umieścić kod do zapisu notatki, np. do bazy danych
+            self.title_input.text = ''
+            self.content_input.text = ''
+            popup = Popup(title='Sukces', content=Label(text='Notatka została dodana.'),
+                          size_hint=(None, None), size=(300, 200))
+            popup.open()
+
+    def go_back(self, instance):
+        # Przechodzimy z powrotem do ekranu "MainScreen"
+        self.manager.current = 'main'
+
+
 class NoteApp(App):
     def build(self):
         sm = ScreenManager()
         sm.add_widget(MainScreen(name='main'))
+        sm.add_widget(AddNoteScreen(name='add_note'))
 
         # Dynamiczne aktualizowanie rozmiaru tła
         def update_background(instance, value):
