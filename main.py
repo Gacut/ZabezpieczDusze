@@ -151,7 +151,14 @@ class AddNoteScreen(Screen):
         bottom_buttons_layout_text.add_widget(anchor_layout_text) # Kolejny pusty widget żeby zrobić odstęp między przyciskami
         bottom_buttons_layout_text.add_widget(self.add_button)
 
+        self.add_text_color_background()
         self.add_widget(layout)
+        
+    def add_text_color_background(self):
+        with self.canvas.before:
+            Color(0.027, 0.082, 0.137, 1)  # #071522
+            Rectangle(pos=self.pos, size=Window.size)
+
 
     def add_note(self, instance):
         title = self.title_input.text
