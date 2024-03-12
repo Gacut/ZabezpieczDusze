@@ -120,15 +120,15 @@ class AddNoteScreen(Screen):
     def __init__(self, **kwargs):
         super(AddNoteScreen, self).__init__(**kwargs)
         
-        layout = BoxLayout(orientation='vertical', padding=20)
+        layout = BoxLayout(orientation='vertical', padding=20, spacing=1)
 
-        bottom_buttons_layout_text = BoxLayout(size_hint=(1, None), height=50, spacing=5)
+        bottom_buttons_layout_text = BoxLayout(size_hint=(1, None), height=70, spacing=5)
 
 
-        title_label = Label(text='Tytuł notatki:')
-        self.title_input = TextInput()
-        
-        content_label = Label(text='Treść notatki:')
+        title_label = Label(text='Tytuł notatki:', size_hint_x=None, width=100, size_hint_y=None, height=30)
+        self.title_input = TextInput(size_hint_y=None, height=30, size_hint_x=None, width=Window.width / 4)
+
+        content_label = Label(text='Treść notatki:', size_hint_x=None, width=100, size_hint_y=None, height=30)
         self.content_input = TextInput()
 
         # Przycisk "Dodaj" ustawiony na prawej stronie na dole
@@ -151,14 +151,15 @@ class AddNoteScreen(Screen):
         bottom_buttons_layout_text.add_widget(anchor_layout_text) # Kolejny pusty widget żeby zrobić odstęp między przyciskami
         bottom_buttons_layout_text.add_widget(self.add_button)
 
+        
         self.add_text_color_background()
         self.add_widget(layout)
+
         
     def add_text_color_background(self):
         with self.canvas.before:
             Color(0.027, 0.082, 0.137, 1)  # #071522
             Rectangle(pos=self.pos, size=Window.size)
-
 
     def add_note(self, instance):
         title = self.title_input.text
