@@ -70,18 +70,22 @@ class MainScreen(Screen):
         add_button.bind(on_press=self.show_add_popup)
 
     def show_menu_popup(self, instance):
-        content = BoxLayout(orientation='vertical', spacing=40)
+        content = BoxLayout(orientation='vertical', spacing=10)
         button1 = Button(text='Przycisk 1', size_hint_y=None, height=50)
         button2 = Button(text='Przycisk 2', size_hint_y=None, height=50)
         button3 = Button(text='Przycisk 3', size_hint_y=None, height=50)
-        close_button = Button(text='Zamknij', size_hint_y=None, height=50)
+        close_button = Button(size_hint_y=None, height=50, background_normal='grafiki/zamknij.png', background_down='grafiki/zamknij2.png')
+        close_button_bar_menu = BoxLayout(orientation='horizontal')
 
         content.add_widget(button1)
         content.add_widget(button2)
         content.add_widget(button3)
-        content.add_widget(close_button)
+        close_button_bar_menu.add_widget(BoxLayout())
+        close_button_bar_menu.add_widget(close_button)
+        close_button_bar_menu.add_widget(BoxLayout())
+        content.add_widget(close_button_bar_menu)
 
-        popup = Popup(title='Menu', content=content, size_hint=(None, None), size=(300, 200))
+        popup = Popup(title='Menu', content=content, size_hint=(None, None), size=(300, 300))
         close_button.bind(on_press=popup.dismiss)
         popup.open()
 
@@ -90,14 +94,21 @@ class MainScreen(Screen):
         add_text_button = Button(size_hint_y=None, height=80, background_normal='grafiki/dodajnotatketext.png', background_down='grafiki/dodajnotatketext2.png')
         add_text_button.bind(on_press=self.add_note_and_close_popup)
         add_video_button = Button(size_hint_y=None, height=80, background_normal='grafiki/dodajnotatkewideo.png', background_down='grafiki/dodajnotatkewideo2.png')
-        close_button = Button(text='Zamknij', size_hint_y=None, height=50)
+        close_button = Button(size_hint=(None, None), size=(80, 50), background_normal='grafiki/zamknij.png', background_down='grafiki/zamknij2.png')
+        close_button_bar_add = BoxLayout(orientation='horizontal')
+
 
         # Dodajemy akcje przycisku "Dodaj notatkę tekstową"
         add_text_button.bind(on_press=self.show_add_note_screen)
 
+        close_button_bar_add.add_widget(BoxLayout())
+        close_button_bar_add.add_widget(close_button)
+        close_button_bar_add.add_widget(BoxLayout())
         content.add_widget(add_text_button)
         content.add_widget(add_video_button)
-        content.add_widget(close_button)
+        content.add_widget(close_button_bar_add)
+
+        
 
         popup = Popup(title="Jaką notatkę dziś chcesz dodać?", content=content, size_hint=(None, None), size=(300, 280))
         close_button.bind(on_press=popup.dismiss)
