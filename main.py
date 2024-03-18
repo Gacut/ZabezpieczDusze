@@ -66,8 +66,8 @@ class MainScreen(Screen):
 
         self.add_widget(layout)
 
-        menu_button.bind(on_press=self.show_menu_popup)
-        add_button.bind(on_press=self.show_add_popup)
+        menu_button.bind(on_release=self.show_menu_popup)
+        add_button.bind(on_release=self.show_add_popup)
 
     def show_menu_popup(self, instance):
         content = BoxLayout(orientation='vertical', spacing=10)
@@ -86,20 +86,22 @@ class MainScreen(Screen):
         content.add_widget(close_button_bar_menu)
 
         popup = Popup(title='Menu', content=content, size_hint=(None, None), size=(300, 300))
-        close_button.bind(on_press=popup.dismiss)
+        close_button.bind(on_release=popup.dismiss)
         popup.open()
 
     def show_add_popup(self, instance):
         content = BoxLayout(orientation='vertical')
         add_text_button = Button(size_hint_y=None, height=80, background_normal='grafiki/dodajnotatketext.png', background_down='grafiki/dodajnotatketext2.png')
-        add_text_button.bind(on_press=self.add_note_and_close_popup)
+        add_text_button.bind(on_release=self.add_note_and_close_popup)
         add_video_button = Button(size_hint_y=None, height=80, background_normal='grafiki/dodajnotatkewideo.png', background_down='grafiki/dodajnotatkewideo2.png')
+        add_video_button.bind(on_release=self.add_video_and_close_popup)
         close_button = Button(size_hint=(None, None), size=(80, 50), background_normal='grafiki/zamknij.png', background_down='grafiki/zamknij2.png')
         close_button_bar_add = BoxLayout(orientation='horizontal')
 
 
         # Dodajemy akcje przycisku "Dodaj notatkę tekstową"
-        add_text_button.bind(on_press=self.show_add_note_screen)
+        add_text_button.bind(on_release=self.show_add_note_screen)
+        add_video_button.bind(on_release=self.show_add_video_screen)
 
         close_button_bar_add.add_widget(BoxLayout())
         close_button_bar_add.add_widget(close_button)
@@ -108,10 +110,8 @@ class MainScreen(Screen):
         content.add_widget(add_video_button)
         content.add_widget(close_button_bar_add)
 
-        
-
         popup = Popup(title="Jaką notatkę dziś chcesz dodać?", content=content, size_hint=(None, None), size=(300, 280))
-        close_button.bind(on_press=popup.dismiss)
+        close_button.bind(on_release=popup.dismiss)
         popup.open()
 
     def add_note_and_close_popup(self, instance):
@@ -122,11 +122,21 @@ class MainScreen(Screen):
                 widget.dismiss()
                 break
 
+    def add_video_and_close_popup(self, instance):
+        self.show_add_video_screen(instance)
+        # Znajdź popup "show_add_popup" i zamknij go
+        for widget in instance.walk_reverse():
+            if isinstance(widget, Popup):
+                widget.dismiss()
+                break
+
     def show_add_note_screen(self, instance):
         self.manager.current = 'add_note'
 
+    def show_add_video_screen(self, instance):
+        self.manager.current = 'add_video_note'
 
-#Ekran wprowadzania notateek tekstowych
+#Ekran wprowadzania notatek tekstowych
 class AddNoteScreen(Screen):
     def __init__(self, **kwargs):
         super(AddNoteScreen, self).__init__(**kwargs)
@@ -144,11 +154,11 @@ class AddNoteScreen(Screen):
 
         # Przycisk "Dodaj" ustawiony na prawej stronie na dole
         self.add_button = Button(text='Dodaj', size_hint=(None, None), size=(100, 50), pos_hint={'right': 1})
-        self.add_button.bind(on_press=self.add_note)
+        self.add_button.bind(on_release=self.add_note)
 
         # Przycisk "Wróć" ustawiony na lewej stronie na dole
         back_button = Button(text='Wróć', size_hint=(None, None), size=(100, 50), pos_hint={'left': 1})
-        back_button.bind(on_press=self.go_back)
+        back_button.bind(on_release=self.go_back)
 
         layout.add_widget(title_label)
         layout.add_widget(self.title_input)
@@ -191,12 +201,76 @@ class AddNoteScreen(Screen):
         # Przechodzimy z powrotem do ekranu "MainScreen"
         self.manager.current = 'main'
 
+#Ekran wprowadzania notatek video
+class AddVideoNoteScreen(Screen):
+    def __init__(self, **kwargs):
+        super(AddVideoNoteScreen, self).__init__(**kwargs)
+
+        layout_video = BoxLayout(orientation='vertical', padding=20, spacing=1)
+
+        bottom_buttons_layout_video = BoxLayout(size_hint=(1, None), height=70, spacing=5)
+
+        title_video_label = Label(text='Tytuł:', size_hint_x=None, width=100, size_hint_y=None, height=30)
+        self.title_input = TextInput(size_hint_y=None, height=30, size_hint_x=None, width=Window.width / 4)
+
+        add_video_button = Button(text='Dodaj Wideo', size_hint=(None, None), size=(100, 50))
+        record_video_button = Button(text='Nagraj wideo', size_hint=(None, None), size=(100, 50))
+
+        content_video_label = Label(text='Treść notatki:', size_hint_x=None, width=100, size_hint_y=None, height=30)
+        self.content_video_input = TextInput()
+
+        self.add_multimedia_button = Button(text='Dodaj', size_hint=(None, None), size=(100, 50), pos_hint={'right': 1})
+        self.add_multimedia_button.bind(on_release=self.add_video_note)
+
+        back_video_button = Button(text='Wróć', size_hint=(None, None), size=(100, 50), pos_hint={'left': 1})
+        back_video_button.bind(on_release=self.go_back)
+
+        layout_video.add_widget(title_video_label)
+        layout_video.add_widget(self.title_input)
+        layout_video.add_widget(add_video_button)
+        layout_video.add_widget(record_video_button)
+        layout_video.add_widget(content_video_label)
+        layout_video.add_widget(self.content_video_input)
+        layout_video.add_widget(bottom_buttons_layout_video)
+
+        bottom_buttons_layout_video.add_widget(back_video_button)
+        anchor_layout_text = AnchorLayout(anchor_x='center')
+        bottom_buttons_layout_video.add_widget(anchor_layout_text)
+        bottom_buttons_layout_video.add_widget(self.add_multimedia_button)
+
+        self.add_text_color_background()
+        self.add_widget(layout_video)
+
+
+    def add_text_color_background(self):
+        with self.canvas.before:
+            Color(0.027, 0.082, 0.137, 1)  # #071522
+            Rectangle(pos=self.pos, size=Window.size)
+
+    def add_video_note(self, instance):
+        title = self.title_input.text
+        content = self.content_input.text
+        if title.strip() == '' or content.strip() == '':
+            popup = Popup(title='Błąd', content=Label(text='Tytuł i treść notatki nie mogą być puste.'),
+                          size_hint=(None, None), size=(300, 200))
+            popup.open()
+        else:
+            # Tutaj możesz umieścić kod do zapisu notatki, np. do bazy danych
+            self.title_input.text = ''
+            self.content_input.text = ''
+            popup = Popup(title='Sukces', content=Label(text='Notatka została dodana.'),
+                          size_hint=(None, None), size=(300, 200))
+            popup.open()
+
+    def go_back(self, instance):
+        self.manager.current = 'main'
 
 class NoteApp(App):
     def build(self):
         sm = ScreenManager()
         sm.add_widget(MainScreen(name='main'))
         sm.add_widget(AddNoteScreen(name='add_note'))
+        sm.add_widget(AddVideoNoteScreen(name='add_video_note'))
 
         # Dynamiczne aktualizowanie rozmiaru tła
         def update_background(instance, value):
