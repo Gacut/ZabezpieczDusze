@@ -10,11 +10,14 @@ Planuję także stworzyć aplikację AI, która pozwoli na import danych z Zabez
 Wszystko to miałoby formę chatbota wytrenowanego na podstawie danych z ZabezpieczDuszę.
 Ale to dopiero, gdy opanuję temat związany z AI chatbotami i modelami.
 
+# Stack
+Python: Kivy
 
 # Creditsy
 Frontend: ChatGPT (Głównie dlatego, że nie nawidzę programować frontu)
 
 Grafiki: Bing.com/create
+
 
 
 
