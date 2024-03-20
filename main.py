@@ -156,6 +156,8 @@ class AddNoteScreen(Screen):
         self.add_button = Button(text='Dodaj', size_hint=(None, None), size=(100, 50), pos_hint={'right': 1})
         self.add_button.bind(on_release=self.add_note)
 
+        self.picture_button = Button(text='Dołącz zdjęcie', size_hint=(None, None), size=(105, 50), pos_hint={'right': 1})
+
         # Przycisk "Wróć" ustawiony na lewej stronie na dole
         back_button = Button(text='Wróć', size_hint=(None, None), size=(100, 50), pos_hint={'left': 1})
         back_button.bind(on_release=self.go_back)
@@ -166,10 +168,11 @@ class AddNoteScreen(Screen):
         layout.add_widget(self.content_input)
         layout.add_widget(bottom_buttons_layout_text)
 
-        # Dodanie przycisków "Wróć" oraz "Dodaj" na dole ekranu
+        # Dodanie przycisków "Wróć", "Dołącz zdjęcie" oraz "Dodaj" na dole ekranu
         bottom_buttons_layout_text.add_widget(back_button)
         anchor_layout_text = AnchorLayout(anchor_x='center')
         bottom_buttons_layout_text.add_widget(anchor_layout_text) # Kolejny pusty widget żeby zrobić odstęp między przyciskami
+        bottom_buttons_layout_text.add_widget(self.picture_button)
         bottom_buttons_layout_text.add_widget(self.add_button)
 
         
