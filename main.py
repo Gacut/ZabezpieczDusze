@@ -209,7 +209,7 @@ class AddVideoNoteScreen(Screen):
     def __init__(self, **kwargs):
         super(AddVideoNoteScreen, self).__init__(**kwargs)
 
-        layout_video = BoxLayout(orientation='vertical', padding=20, spacing=1)
+        layout_video = BoxLayout(orientation='vertical', padding=20, spacing=2)
 
         bottom_buttons_layout_video = BoxLayout(size_hint=(1, None), height=70, spacing=5)
 
@@ -217,7 +217,15 @@ class AddVideoNoteScreen(Screen):
         self.title_input = TextInput(size_hint_y=None, height=30, size_hint_x=None, width=Window.width / 4)
 
         add_video_button = Button(text='Dodaj Wideo', size_hint=(None, None), size=(100, 50))
+        multimedia_label = Label(text='Ścieżka pliku wideo...', size_hint=(None, None), size=(150, 30))
         record_video_button = Button(text='Nagraj wideo', size_hint=(None, None), size=(100, 50))
+
+        button_box = BoxLayout(orientation='vertical', height=10)
+        add_video_layout = BoxLayout()
+        add_video_layout.add_widget(add_video_button)
+        add_video_layout.add_widget(multimedia_label)
+        button_box.add_widget(add_video_layout)
+        button_box.add_widget(record_video_button)
 
         content_video_label = Label(text='Treść notatki:', size_hint_x=None, width=100, size_hint_y=None, height=30)
         self.content_video_input = TextInput()
@@ -230,10 +238,10 @@ class AddVideoNoteScreen(Screen):
 
         layout_video.add_widget(title_video_label)
         layout_video.add_widget(self.title_input)
-        layout_video.add_widget(add_video_button)
-        layout_video.add_widget(record_video_button)
+        layout_video.add_widget(button_box)
         layout_video.add_widget(content_video_label)
         layout_video.add_widget(self.content_video_input)
+
         layout_video.add_widget(bottom_buttons_layout_video)
 
         bottom_buttons_layout_video.add_widget(back_video_button)
