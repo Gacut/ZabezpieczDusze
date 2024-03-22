@@ -11,6 +11,7 @@ Wszystko to miałoby formę chatbota wytrenowanego na podstawie danych z Zabezpi
 Ale to dopiero, gdy opanuję temat związany z AI chatbotami i modelami.
 
 Podgląd aplikacji (WIP):
+
 ![image](https://github.com/Gacut/ZabezpieczDusze/assets/25847115/fb6916a4-18cf-4273-86ac-157a976c9577)
 
 
