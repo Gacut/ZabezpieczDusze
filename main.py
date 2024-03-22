@@ -144,8 +144,7 @@ class AddNoteScreen(Screen):
         layout = BoxLayout(orientation='vertical', padding=20, spacing=1)
 
         bottom_buttons_layout_text = BoxLayout(size_hint=(1, None), height=70, spacing=5)
-
-
+        
         title_label = Label(text='Tytuł notatki:', size_hint_x=None, width=100, size_hint_y=None, height=30)
         self.title_input = TextInput(size_hint_y=None, height=30, size_hint_x=None, width=Window.width / 4)
 
@@ -220,7 +219,7 @@ class AddVideoNoteScreen(Screen):
         multimedia_label = Label(text='Ścieżka pliku wideo...', size_hint=(None, None), size=(150, 30))
         record_video_button = Button(text='Nagraj wideo', size_hint=(None, None), size=(100, 50))
 
-        button_box = BoxLayout(orientation='vertical', height=10)
+        button_box = BoxLayout(orientation='vertical')
         add_video_layout = BoxLayout()
         add_video_layout.add_widget(add_video_button)
         add_video_layout.add_widget(multimedia_label)
@@ -260,7 +259,7 @@ class AddVideoNoteScreen(Screen):
 
     def add_video_note(self, instance):
         title = self.title_input.text
-        content = self.content_input.text
+        content = self.content_video_input.text
         if title.strip() == '' or content.strip() == '':
             popup = Popup(title='Błąd', content=Label(text='Tytuł i treść notatki nie mogą być puste.'),
                           size_hint=(None, None), size=(300, 200))
@@ -268,7 +267,7 @@ class AddVideoNoteScreen(Screen):
         else:
             # Tutaj możesz umieścić kod do zapisu notatki, np. do bazy danych
             self.title_input.text = ''
-            self.content_input.text = ''
+            self.content_video_input.text = ''
             popup = Popup(title='Sukces', content=Label(text='Notatka została dodana.'),
                           size_hint=(None, None), size=(300, 200))
             popup.open()
