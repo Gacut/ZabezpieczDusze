@@ -16,7 +16,7 @@ Podgląd aplikacji (WIP):
 
 
 # Stack
-Python: Kivy
+Python: Kivy - frontend
 
 # Creditsy
 Frontend: ChatGPT (Głównie dlatego, że nie nawidzę programować frontu)
