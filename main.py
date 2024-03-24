@@ -9,15 +9,18 @@ from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle, InstructionGroup, Line
 from kivy.app import App
 from kivy.uix.anchorlayout import AnchorLayout
+import csv
+import os
+
 
 class NoteWidget(BoxLayout):
-    def __init__(self, note_text, **kwargs):
+    def __init__(self, note_data, **kwargs):
         super(NoteWidget, self).__init__(**kwargs)
         self.orientation = 'vertical'
         self.size_hint_y = None
         self.height = 150
         self.padding = [30, 20]   # Odstęp widżetu notatek 30px od boków oraz 5px od kolejnego wpisu
-        self.add_widget(Label(text=note_text))
+        self.add_widget(Label(text=note_data['title']))
 
         self.bind(pos=self.update_canvas)
         self.bind(size=self.update_canvas)
@@ -35,6 +38,18 @@ class NoteWidget(BoxLayout):
             self.canvas.before.add(self.border)
 
 class MainScreen(Screen):
+
+    #tworzenie pustego pliku CSV
+    def create_empty_csv(self, file_name):
+        # Ustawia ścieżkę pliku taką samą, w jakiej znajduje się aplikacja
+        app_folder = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(app_folder, file_name)
+
+        if not os.path.exists(file_path):
+            with open(file_path, 'w', newline='') as file:
+                writer = csv.DictWriter(file, fieldnames=['title', 'content'])
+                writer.writeheader()
+
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
 
@@ -42,9 +57,19 @@ class MainScreen(Screen):
 
         self.notes_layout = BoxLayout(orientation='vertical', spacing=10, size_hint_y=None)
         self.notes_layout.bind(minimum_height=self.notes_layout.setter('height'))
-        for i in range(6):
-            note = NoteWidget(note_text=f'Notatka tekstowa {i+1}')
-            self.notes_layout.add_widget(note)
+
+
+        if not os.path.exists('notes.csv'):
+            self.create_empty_csv('notes.csv')
+
+        notes = self.load_notes_from_csv('notes.csv')
+        for note in notes:
+            note_widget = NoteWidget(note)
+            self.notes_layout.add_widget(note_widget)
+
+        # for i in range(6):
+        #     note = NoteWidget(note_text=f'Notatka tekstowa {i+1}')
+        #     self.notes_layout.add_widget(note)
 
         scroll_view = ScrollView()
         scroll_view.add_widget(self.notes_layout)
@@ -69,9 +94,17 @@ class MainScreen(Screen):
         menu_button.bind(on_release=self.show_menu_popup)
         add_button.bind(on_release=self.show_add_popup)
 
+    def load_notes_from_csv(self, file_path):
+        notes = []
+        with open(file_path, 'r') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                notes.append(row)
+        return notes
+
     def show_menu_popup(self, instance):
         content = BoxLayout(orientation='vertical', spacing=10)
-        button1 = Button(text='Przycisk 1', size_hint_y=None, height=50)
+        button1 = Button(text='Import/Export do pliku', size_hint_y=None, height=50)
         button2 = Button(text='Przycisk 2', size_hint_y=None, height=50)
         button3 = Button(text='Przycisk 3', size_hint_y=None, height=50)
         close_button = Button(size_hint=(None, None), size=(80, 50), background_normal='grafiki/zamknij.png', background_down='grafiki/zamknij2.png')
