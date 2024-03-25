@@ -37,6 +37,7 @@ class NoteWidget(BoxLayout):
             self.border.add(Line(rectangle=(self.x + self.padding[0], self.y + self.padding[1], self.width - 2 * self.padding[0], self.height - 2 * self.padding[1]), width=2))
             self.canvas.before.add(self.border)
 
+#ekran główny
 class MainScreen(Screen):
 
     #tworzenie pustego pliku CSV
@@ -66,10 +67,6 @@ class MainScreen(Screen):
         for note in notes:
             note_widget = NoteWidget(note)
             self.notes_layout.add_widget(note_widget)
-
-        # for i in range(6):
-        #     note = NoteWidget(note_text=f'Notatka tekstowa {i+1}')
-        #     self.notes_layout.add_widget(note)
 
         scroll_view = ScrollView()
         scroll_view.add_widget(self.notes_layout)
@@ -217,20 +214,31 @@ class AddNoteScreen(Screen):
             Color(0.027, 0.082, 0.137, 1)  # #071522
             Rectangle(pos=self.pos, size=Window.size)
 
+    import csv
+
     def add_note(self, instance):
         title = self.title_input.text
         content = self.content_input.text
+        notes_file = "notes.csv"
+
         if title.strip() == '' or content.strip() == '':
             popup = Popup(title='Błąd', content=Label(text='Tytuł i treść notatki nie mogą być puste.'),
-                          size_hint=(None, None), size=(300, 200))
+                        size_hint=(None, None), size=(300, 200))
             popup.open()
         else:
-            # Tutaj możesz umieścić kod do zapisu notatki, np. do bazy danych
-            self.title_input.text = ''
-            self.content_input.text = ''
-            popup = Popup(title='Sukces', content=Label(text='Notatka została dodana.'),
-                          size_hint=(None, None), size=(300, 200))
-            popup.open()
+            # Otwórz plik "notes.csv" w trybie dodawania (append) aby nie nadpisać istniejących notatek
+            with open(notes_file, 'a', newline='') as file:
+                writer = csv.DictWriter(file, fieldnames=['title', 'content'])
+                
+                # Zapisz notatkę do pliku CSV
+                writer.writerow({'title': title, 'content': content})
+                
+                self.title_input.text = ''
+                self.content_input.text = ''
+                popup = Popup(title='Sukces', content=Label(text='Notatka została dodana.'),
+                            size_hint=(None, None), size=(300, 200))
+                popup.open()
+
 
     def go_back(self, instance):
         # Przechodzimy z powrotem do ekranu "MainScreen"
