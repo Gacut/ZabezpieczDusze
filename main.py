@@ -135,7 +135,7 @@ class MainScreen(Screen):
 
         close_button_bar_add.add_widget(BoxLayout())
         close_button_bar_add.add_widget(close_button)
-        close_button_bar_add.add_widget(BoxLayout())
+        close_button_bar_add.add_widget(BoxLayout())  
         content.add_widget(add_text_button)
         content.add_widget(add_video_button)
         content.add_widget(close_button_bar_add)
