@@ -9,6 +9,8 @@ from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle, InstructionGroup, Line
 from kivy.app import App
 from kivy.uix.anchorlayout import AnchorLayout
+from kivy.uix.gridlayout import GridLayout
+from kivy.metrics import dp
 import csv
 import os
 
@@ -54,11 +56,10 @@ class MainScreen(Screen):
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
 
-        layout = BoxLayout(orientation='vertical', spacing=5, padding=[0, 20, 0, 0])  # Ustawiamy margines górny na 20 pikseli
+        layout = GridLayout(cols=1, spacing=dp(10), padding=[dp(10), dp(20)])  # Ustawiamy margines górny na 20 pikseli
 
         self.notes_layout = BoxLayout(orientation='vertical', spacing=10, size_hint_y=None)
         self.notes_layout.bind(minimum_height=self.notes_layout.setter('height'))
-
 
         if not os.path.exists('notes.csv'):
             self.create_empty_csv('notes.csv')
@@ -125,11 +126,12 @@ class MainScreen(Screen):
         add_text_button.bind(on_release=self.add_note_and_close_popup)
         add_video_button = Button(size_hint_y=None, height=80, background_normal='grafiki/dodajnotatkewideo.png', background_down='grafiki/dodajnotatkewideo2.png')
         add_video_button.bind(on_release=self.add_video_and_close_popup)
+        add_audio_button = Button(text='Dodaj notatkę audio', size_hint_y=None, height=80)
         close_button = Button(size_hint=(None, None), size=(80, 50), background_normal='grafiki/zamknij.png', background_down='grafiki/zamknij2.png')
         close_button_bar_add = BoxLayout(orientation='horizontal')
 
 
-        # Dodajemy akcje przycisku "Dodaj notatkę tekstową"
+        # Dodajemy akcje przycisku "Dodaj notatkę tekstową" oraz "Dodaj notatkę video"
         add_text_button.bind(on_release=self.show_add_note_screen)
         add_video_button.bind(on_release=self.show_add_video_screen)
 
@@ -138,9 +140,10 @@ class MainScreen(Screen):
         close_button_bar_add.add_widget(BoxLayout())  
         content.add_widget(add_text_button)
         content.add_widget(add_video_button)
+        content.add_widget(add_audio_button)
         content.add_widget(close_button_bar_add)
 
-        popup = Popup(title="Jaką notatkę dziś chcesz dodać?", content=content, size_hint=(None, None), size=(300, 280))
+        popup = Popup(title="Jaką notatkę dziś chcesz dodać?", content=content, size_hint=(None, None), size=(300, 360))
         close_button.bind(on_release=popup.dismiss)
         popup.open()
 
@@ -171,9 +174,9 @@ class AddNoteScreen(Screen):
     def __init__(self, **kwargs):
         super(AddNoteScreen, self).__init__(**kwargs)
         
-        layout = BoxLayout(orientation='vertical', padding=20, spacing=1)
+        layout = GridLayout(cols=1, padding=[dp(20), dp(20), dp(20), dp(0)])
 
-        bottom_buttons_layout_text = BoxLayout(size_hint=(1, None), height=70, spacing=5)
+        bottom_buttons_layout_text = GridLayout(cols=4, size_hint_y=None, height=dp(70), spacing=dp(5), padding=dp(10))
         
         title_label = Label(text='Tytuł notatki:', size_hint_x=None, width=100, size_hint_y=None, height=30)
         self.title_input = TextInput(size_hint_y=None, height=30, size_hint_x=None, width=Window.width / 4)
@@ -249,9 +252,9 @@ class AddVideoNoteScreen(Screen):
     def __init__(self, **kwargs):
         super(AddVideoNoteScreen, self).__init__(**kwargs)
 
-        layout_video = BoxLayout(orientation='vertical', padding=20, spacing=2)
+        layout_video = GridLayout(cols=1, spacing=dp(2), padding=[dp(20)])
 
-        bottom_buttons_layout_video = BoxLayout(size_hint=(1, None), height=70, spacing=5)
+        bottom_buttons_layout_video = GridLayout(cols=3, size_hint_y=None, height=dp(70), spacing=dp(5))
 
         title_video_label = Label(text='Tytuł:', size_hint_x=None, width=100, size_hint_y=None, height=30)
         self.title_input = TextInput(size_hint_y=None, height=30, size_hint_x=None, width=Window.width / 4)
