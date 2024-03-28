@@ -20,8 +20,8 @@ class NoteWidget(BoxLayout):
         super(NoteWidget, self).__init__(**kwargs)
         self.orientation = 'vertical'
         self.size_hint_y = None
-        self.height = 150
-        self.padding = [30, 20]   # Odstęp widżetu notatek 30px od boków oraz 5px od kolejnego wpisu
+        self.height = Window.height * 0.2
+        self.padding = [30, 6]   
         self.add_widget(Label(text=note_data['title']))
 
         self.bind(pos=self.update_canvas)
@@ -53,6 +53,8 @@ class MainScreen(Screen):
                 writer = csv.DictWriter(file, fieldnames=['title', 'content'])
                 writer.writeheader()
 
+
+
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
 
@@ -72,16 +74,24 @@ class MainScreen(Screen):
         scroll_view = ScrollView()
         scroll_view.add_widget(self.notes_layout)
 
-        bottom_buttons_layout = BoxLayout(size_hint=(1, None), height=50, spacing=5)
-        menu_button = Button(size_hint=(None, None), size=(91, 79), background_normal='grafiki/menu.png', background_down='grafiki/menu2.png')
+        max_width = Window.width * 0.8
+        max_height = Window.height * 0.1  # Możemy dostosować tę wartość do potrzeb
+        bottom_buttons_layout = BoxLayout(size_hint=(1, None), height=min(max_height, Window.height * 0.2), spacing=5)
+
+        # Ustawienie wysokości przycisków w zależności od wysokości bottom_buttons_layout
+        button_height = bottom_buttons_layout.height * 2.5
+        button_width = bottom_buttons_layout.width * 2
+
+        # Dodanie przycisków do bottom_buttons_layout
+        menu_button = Button(size_hint=(None, None), size_hint_min=(None, None), size_hint_max=(None, None),
+                            height=button_height, width=button_width,
+                            background_normal='grafiki/menu.png', background_down='grafiki/menu2.png')
+        add_button = Button(size_hint=(None, None), size_hint_min=(None, None), size_hint_max=(None, None),
+                            height=button_height, width=button_width,
+                            background_normal='grafiki/dodaj.png', background_down='grafiki/dodaj2.png')
+
         bottom_buttons_layout.add_widget(menu_button)
-
-        # zdefiniowanie napisu "Zabezpiecz Duszę" wraz z wycentrowaniem go
-        anchor_layout = AnchorLayout(anchor_x='center')
-        anchor_layout.add_widget(Label(text='Zabezpiecz Duszę'))
-        bottom_buttons_layout.add_widget(anchor_layout)
-
-        add_button = Button(size_hint=(None, None), size=(91, 79), pos_hint={'right': 1}, background_normal='grafiki/dodaj.png', background_down='grafiki/dodaj2.png')
+        bottom_buttons_layout.add_widget(Label())
         bottom_buttons_layout.add_widget(add_button)
 
         layout.add_widget(scroll_view)
@@ -117,6 +127,7 @@ class MainScreen(Screen):
         content.add_widget(close_button_bar_menu)
 
         popup = Popup(title='Menu', content=content, size_hint=(None, None), size=(300, 300))
+        popup.size_hint = (0.4, 0.7)
         close_button.bind(on_release=popup.dismiss)
         popup.open()
 
@@ -144,6 +155,7 @@ class MainScreen(Screen):
         content.add_widget(close_button_bar_add)
 
         popup = Popup(title="Jaką notatkę dziś chcesz dodać?", content=content, size_hint=(None, None), size=(300, 360))
+        popup.size_hint = (0.4, 0.6)
         close_button.bind(on_release=popup.dismiss)
         popup.open()
 
