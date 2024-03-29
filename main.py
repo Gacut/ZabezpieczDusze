@@ -111,7 +111,7 @@ class MainScreen(Screen):
         return notes
 
     def show_menu_popup(self, instance):
-        content = BoxLayout(orientation='vertical', spacing=10)
+        content = GridLayout(cols=1, rows=4, spacing=5)
         button1 = Button(text='Import/Export do pliku', size_hint_y=None, height=50)
         button2 = Button(text='Przycisk 2', size_hint_y=None, height=50)
         button3 = Button(text='Przycisk 3', size_hint_y=None, height=50)
@@ -126,8 +126,11 @@ class MainScreen(Screen):
         close_button_bar_menu.add_widget(BoxLayout())
         content.add_widget(close_button_bar_menu)
 
-        popup = Popup(title='Menu', content=content, size_hint=(None, None), size=(300, 300))
-        popup.size_hint = (0.4, 0.7)
+        popup_height = Window.height * 0.4
+        popup_width = Window.width * 0.2
+
+        popup = Popup(title='Menu', content=content, size_hint=(None, None), size=(popup_width, popup_height))
+        # popup.size_hint = (0.4, 0.7)
         close_button.bind(on_release=popup.dismiss)
         popup.open()
 
@@ -154,8 +157,10 @@ class MainScreen(Screen):
         content.add_widget(add_audio_button)
         content.add_widget(close_button_bar_add)
 
-        popup = Popup(title="Jaką notatkę dziś chcesz dodać?", content=content, size_hint=(None, None), size=(300, 360))
-        popup.size_hint = (0.4, 0.6)
+        popup_height = Window.height * 0.4
+        popup_width = Window.width * 0.2
+
+        popup = Popup(title="Jaką notatkę dziś chcesz dodać?", content=content, size_hint=(None, None), size=(popup_width, popup_height))
         close_button.bind(on_release=popup.dismiss)
         popup.open()
 
