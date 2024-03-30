@@ -240,10 +240,12 @@ class AddNoteScreen(Screen):
         title = self.title_input.text
         content = self.content_input.text
         notes_file = "notes.csv"
+        popup_height = Window.height * 0.2
+        popup_width = Window.width * 0.4
 
         if title.strip() == '' or content.strip() == '':
             popup = Popup(title='Błąd', content=Label(text='Tytuł i treść notatki nie mogą być puste.'),
-                        size_hint=(None, None), size=(300, 200))
+                        size_hint=(None, None), size=(popup_width, popup_height))
             popup.open()
         else:
             # Otwórz plik "notes.csv" w trybie dodawania (append) aby nie nadpisać istniejących notatek
@@ -256,7 +258,7 @@ class AddNoteScreen(Screen):
                 self.title_input.text = ''
                 self.content_input.text = ''
                 popup = Popup(title='Sukces', content=Label(text='Notatka została dodana.'),
-                            size_hint=(None, None), size=(300, 200))
+                            size_hint=(None, None), size=(popup_width, popup_height))
                 popup.open()
 
 
@@ -321,16 +323,19 @@ class AddVideoNoteScreen(Screen):
     def add_video_note(self, instance):
         title = self.title_input.text
         content = self.content_video_input.text
+        popup_height = Window.height * 0.2
+        popup_width = Window.width * 0.4
+
         if title.strip() == '' or content.strip() == '':
             popup = Popup(title='Błąd', content=Label(text='Tytuł i treść notatki nie mogą być puste.'),
-                          size_hint=(None, None), size=(300, 200))
+                          size_hint=(None, None), size=(popup_width, popup_height))
             popup.open()
         else:
             # Tutaj możesz umieścić kod do zapisu notatki, np. do bazy danych
             self.title_input.text = ''
             self.content_video_input.text = ''
             popup = Popup(title='Sukces', content=Label(text='Notatka została dodana.'),
-                          size_hint=(None, None), size=(300, 200))
+                          size_hint=(None, None), size=(popup_width, popup_height))
             popup.open()
 
     def go_back(self, instance):
