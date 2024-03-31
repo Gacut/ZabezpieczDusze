@@ -23,6 +23,8 @@ Frontend: ChatGPT (Głównie dlatego, że nie nawidzę programować frontu)
 
 Grafiki: Bing.com/create
 
+# kawakawa
+https://ko-fi.com/gacut/goal?g=0
 
 
 
