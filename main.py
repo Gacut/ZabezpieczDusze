@@ -141,6 +141,7 @@ class MainScreen(Screen):
         add_video_button = Button(size_hint_y=None, height=80, background_normal='grafiki/dodajnotatkewideo.png', background_down='grafiki/dodajnotatkewideo2.png')
         add_video_button.bind(on_release=self.add_video_and_close_popup)
         add_audio_button = Button(text='Dodaj notatkę audio', size_hint_y=None, height=80)
+        add_video_button.bind(on_release=self.add_audio_and_close_popup)
         close_button = Button(size_hint=(None, None), size=(80, 50), background_normal='grafiki/zamknij.png', background_down='grafiki/zamknij2.png')
         close_button_bar_add = BoxLayout(orientation='horizontal')
 
@@ -148,6 +149,7 @@ class MainScreen(Screen):
         # Dodajemy akcje przycisku "Dodaj notatkę tekstową" oraz "Dodaj notatkę video"
         add_text_button.bind(on_release=self.show_add_note_screen)
         add_video_button.bind(on_release=self.show_add_video_screen)
+        add_audio_button.bind(on_release=self.show_add_audio_screen)
 
         close_button_bar_add.add_widget(BoxLayout())
         close_button_bar_add.add_widget(close_button)
@@ -166,7 +168,7 @@ class MainScreen(Screen):
 
     def add_note_and_close_popup(self, instance):
         self.show_add_note_screen(instance)
-        # Znajdź popup "show_add_popup" i zamknij go
+        # Znajdź popup "show_add_note_screen" i zamknij go
         for widget in instance.walk_reverse():
             if isinstance(widget, Popup):
                 widget.dismiss()
@@ -174,7 +176,15 @@ class MainScreen(Screen):
 
     def add_video_and_close_popup(self, instance):
         self.show_add_video_screen(instance)
-        # Znajdź popup "show_add_popup" i zamknij go
+        # Znajdź popup "show_add_video_screen" i zamknij go
+        for widget in instance.walk_reverse():
+            if isinstance(widget, Popup):
+                widget.dismiss()
+                break
+
+    def add_audio_and_close_popup(self, instance):
+        self.show_add_audio_screen(instance)
+        # Znajdź popup "show_add_audio_screen" i zamknij go
         for widget in instance.walk_reverse():
             if isinstance(widget, Popup):
                 widget.dismiss()
@@ -185,6 +195,9 @@ class MainScreen(Screen):
 
     def show_add_video_screen(self, instance):
         self.manager.current = 'add_video_note'
+
+    def show_add_audio_screen(self, instance):
+        self.manager.current = 'add_audio_note'
 
 #Ekran wprowadzania notatek tekstowych
 class AddNoteScreen(Screen):
@@ -341,12 +354,43 @@ class AddVideoNoteScreen(Screen):
     def go_back(self, instance):
         self.manager.current = 'main'
 
+#ekran wprowadzenia notatki audio
+class AddAudioScreen(Screen):
+    def __init__(self, **kwargs):
+        super(AddAudioScreen, self).__init__(**kwargs)
+
+        layout = GridLayout(cols=1, spacing=10, padding=20)
+
+        title_label = Label(text='Tytuł notatki:', size_hint=(None, None), height=30)
+        self.title_input = TextInput(size_hint_x=0.7)
+
+        record_button = Button(text='Nagraj', size_hint=(None, None), size=(100, 50))
+        stop_button = Button(text='Zatrzymaj', size_hint=(None, None), size=(100, 50))
+
+        status_label = Label(text='', size_hint=(None, None), height=30)
+
+        layout.add_widget(title_label)
+        layout.add_widget(self.title_input)
+        layout.add_widget(record_button)
+        layout.add_widget(stop_button)
+        layout.add_widget(status_label)
+
+        self.add_color_background()
+        self.add_widget(layout)
+
+    def add_color_background(self):
+        with self.canvas.before:
+            Color(0.027, 0.082, 0.137, 1)  # #071522
+            Rectangle(pos=self.pos, size=Window.size)
+
+
 class NoteApp(App):
     def build(self):
         sm = ScreenManager()
         sm.add_widget(MainScreen(name='main'))
         sm.add_widget(AddNoteScreen(name='add_note'))
         sm.add_widget(AddVideoNoteScreen(name='add_video_note'))
+        sm.add_widget(AddAudioScreen(name='add_audio_note'))
 
         # Dynamiczne aktualizowanie rozmiaru tła
         def update_background(instance, value):
