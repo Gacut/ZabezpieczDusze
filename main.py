@@ -206,13 +206,13 @@ class AddNoteScreen(Screen):
         
         layout = GridLayout(cols=1, padding=[dp(20), dp(20), dp(20), dp(0)])
 
-        bottom_buttons_layout_text = GridLayout(cols=4, size_hint_y=None, height=dp(70), spacing=dp(5), padding=dp(10))
+        bottom_buttons_layout_text = GridLayout(cols=4, size_hint_y=None, height=dp(70), spacing=dp(5), padding=dp(5))
         
         title_label = Label(text='Tytuł notatki:', size_hint_x=None, width=100, size_hint_y=None, height=30)
-        self.title_input = TextInput(size_hint_y=None, height=30, size_hint_x=None, width=Window.width / 4)
+        self.title_input = TextInput(size_hint_y=None, height=30, size_hint_x=None, width=Window.width / 2)
 
         content_label = Label(text='Treść notatki:', size_hint_x=None, width=100, size_hint_y=None, height=30)
-        self.content_input = TextInput()
+        self.content_input = TextInput(size_hint_x=None, width=Window.width / 2)
 
         # Przycisk "Dodaj" ustawiony na prawej stronie na dole
         self.add_button = Button(text='Dodaj', size_hint=(None, None), size=(100, 50), pos_hint={'right': 1})
@@ -228,6 +228,7 @@ class AddNoteScreen(Screen):
         layout.add_widget(self.title_input)
         layout.add_widget(content_label)
         layout.add_widget(self.content_input)
+        layout.add_widget(Label(size_hint=(None, None), width=Window.width, height=Window.height / 10))
         layout.add_widget(bottom_buttons_layout_text)
 
         # Dodanie przycisków "Wróć", "Dołącz zdjęcie" oraz "Dodaj" na dole ekranu
@@ -358,30 +359,65 @@ class AddVideoNoteScreen(Screen):
 class AddAudioScreen(Screen):
     def __init__(self, **kwargs):
         super(AddAudioScreen, self).__init__(**kwargs)
+        button_height = Window.height * 0.1
+        button_width = Window.width * 0.05
 
-        layout = GridLayout(cols=1, spacing=10, padding=20)
+        bottom_buttons_layout_video = GridLayout(cols=3, size_hint_y=None, height=dp(70), spacing=dp(5))
+
+        layoutMain = GridLayout(cols=1, spacing=2, padding=2)
+        layout = GridLayout(cols=4, spacing=5, padding=2)
+
+        self.add_audio_button = Button(text='Dodaj', size_hint=(None, None), size=(100, 50), pos_hint={'right': 1})
+        self.add_audio_button.bind()
+
+        back_audio_button = Button(text='Wróć', size_hint=(None, None), size=(100, 50), pos_hint={'left': 1})
+        back_audio_button.bind(on_release=self.go_back)
+
 
         title_label = Label(text='Tytuł notatki:', size_hint=(None, None), height=30)
-        self.title_input = TextInput(size_hint_x=0.7)
+        self.title_input = TextInput(size_hint=(0.7, None), height=30, multiline=False)
 
-        record_button = Button(text='Nagraj', size_hint=(None, None), size=(100, 50))
-        stop_button = Button(text='Zatrzymaj', size_hint=(None, None), size=(100, 50))
+        record_button = Button(text='Nagraj', size_hint=(None, None), size=(button_height, button_width))
+        record_button.bind(size=record_button.setter('text_size'))
+        stop_button = Button(text='Zatrzymaj', size_hint=(None, None), size=(button_height, button_width))
+        stop_button.bind(size=stop_button.setter('text_size'))
 
-        status_label = Label(text='', size_hint=(None, None), height=30)
+        status_label = Label(text='testest', size_hint=(None, None), height=30)
 
+        bottom_buttons_layout_video.add_widget(back_audio_button)
+        anchor_layout_text = AnchorLayout(anchor_x='center')
+        bottom_buttons_layout_video.add_widget(anchor_layout_text)
+        bottom_buttons_layout_video.add_widget(self.add_audio_button)
+
+        layout.add_widget(Label(size_hint=(None, None)))
         layout.add_widget(title_label)
         layout.add_widget(self.title_input)
+        layout.add_widget(Label(size_hint=(None, None)))
+        layout.add_widget(Label(size_hint=(None, None)))
         layout.add_widget(record_button)
         layout.add_widget(stop_button)
+        layout.add_widget(Label(size_hint=(None, None)))
+        layout.add_widget(Label(size_hint=(None, None)))
         layout.add_widget(status_label)
+        layout.add_widget(Label(size_hint=(None, None)))
+        layout.add_widget(Label(size_hint=(None, None)))
+        layout.add_widget(Label(size_hint=(None, None)))
+        layout.add_widget(bottom_buttons_layout_video)
+        layout.add_widget(Label(size_hint=(None, None)))
+        layoutMain.add_widget(layout)
 
         self.add_color_background()
-        self.add_widget(layout)
+        self.add_widget(layoutMain)
+
 
     def add_color_background(self):
         with self.canvas.before:
             Color(0.027, 0.082, 0.137, 1)  # #071522
             Rectangle(pos=self.pos, size=Window.size)
+
+    def go_back(self, instance):
+    # Przechodzimy z powrotem do ekranu "MainScreen"
+        self.manager.current = 'main'
 
 
 class NoteApp(App):
