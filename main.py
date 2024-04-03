@@ -22,13 +22,22 @@ class NoteWidget(BoxLayout):
         self.size_hint_y = None
         self.height = Window.height * 0.2
         self.padding = [30, 6]   
+        self.note_data = note_data
         self.add_widget(Label(text=note_data['title']))
+        self.bind(on_touch_down=self.on_click)
 
         self.bind(pos=self.update_canvas)
         self.bind(size=self.update_canvas)
 
         self.border = InstructionGroup()
         self.update_canvas()
+
+    def on_click(self, instance, touch):
+        if self.collide_point(*touch.pos):
+            app = App.get_running_app()
+            app.root.current = 'note_details'
+            note_details_screen = app.root.get_screen('note_details')
+            note_details_screen.display_note_details(self.note_data)
 
     def update_canvas(self, *args):
         self.canvas.before.clear()
@@ -74,20 +83,14 @@ class MainScreen(Screen):
         scroll_view = ScrollView()
         scroll_view.add_widget(self.notes_layout)
 
-        max_width = Window.width * 0.8
-        max_height = Window.height * 0.1  # Możemy dostosować tę wartość do potrzeb
-        bottom_buttons_layout = BoxLayout(size_hint=(1, None), height=min(max_height, Window.height * 0.2), spacing=5)
-
-        # Ustawienie wysokości przycisków w zależności od wysokości bottom_buttons_layout
-        button_height = bottom_buttons_layout.height * 2.5
-        button_width = bottom_buttons_layout.width * 2
+        bottom_buttons_layout = BoxLayout(size_hint_max=(None, dp(0.01)), spacing=5)
 
         # Dodanie przycisków do bottom_buttons_layout
         menu_button = Button(size_hint=(None, None), size_hint_min=(None, None), size_hint_max=(None, None),
-                            height=button_height, width=button_width,
+                            height=dp(80), width=dp(100),
                             background_normal='grafiki/menu.png', background_down='grafiki/menu2.png')
         add_button = Button(size_hint=(None, None), size_hint_min=(None, None), size_hint_max=(None, None),
-                            height=button_height, width=button_width,
+                            height=dp(80), width=dp(100),
                             background_normal='grafiki/dodaj.png', background_down='grafiki/dodaj2.png')
 
         bottom_buttons_layout.add_widget(menu_button)
@@ -416,17 +419,47 @@ class AddAudioScreen(Screen):
             Rectangle(pos=self.pos, size=Window.size)
 
     def go_back(self, instance):
-    # Przechodzimy z powrotem do ekranu "MainScreen"
         self.manager.current = 'main'
+
+#ekran widoku notatki
+class NoteDetailsScreen(Screen):
+    def __init__(self, **kwargs):
+        super(NoteDetailsScreen, self).__init__(**kwargs)
+        layout = GridLayout(cols=1)
+        self.title_label = Label(text='', size_hint=(1, None), height=50)
+        self.content_label = Label(text='', size_hint=(1, 1))
+        self.back_button = Button(text="Wróć", size_hint=(None, None), size=(dp(100), dp(50)))
+        self.back_button.bind(on_release=self.go_back)
+        layout.add_widget(self.title_label)
+        layout.add_widget(self.content_label)
+        layout.add_widget(self.back_button)
+        self.add_widget(layout)
+        self.add_color_background()
+
+    def display_note_details(self, note_data):
+        self.title_label.text = note_data['title']
+        self.content_label.text = note_data['content']
+
+    def add_color_background(self):
+        with self.canvas.before:
+            Color(0.027, 0.082, 0.137, 1)  # #071522
+            Rectangle(pos=self.pos, size=Window.size)
+
+    def go_back(self, instance):
+        self.manager.current = 'main'
+
 
 
 class NoteApp(App):
     def build(self):
         sm = ScreenManager()
-        sm.add_widget(MainScreen(name='main'))
+        main_screen = MainScreen(name='main')
+        sm.add_widget(main_screen)
         sm.add_widget(AddNoteScreen(name='add_note'))
         sm.add_widget(AddVideoNoteScreen(name='add_video_note'))
         sm.add_widget(AddAudioScreen(name='add_audio_note'))
+        note_details_screen = NoteDetailsScreen(name='note_details')
+        sm.add_widget(note_details_screen)
 
         # Dynamiczne aktualizowanie rozmiaru tła
         def update_background(instance, value):
