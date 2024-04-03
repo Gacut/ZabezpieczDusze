@@ -114,7 +114,7 @@ class MainScreen(Screen):
         content = GridLayout(cols=1, rows=4, spacing=5)
         button1 = Button(text='Import/Export do pliku', size_hint_y=None, height=50)
         button2 = Button(text='Przycisk 2', size_hint_y=None, height=50)
-        button3 = Button(text='Przycisk 3', size_hint_y=None, height=50)
+        button3 = Button(text='Creditsy', size_hint_y=None, height=50)
         close_button = Button(size_hint=(None, None), size=(80, 50), background_normal='grafiki/zamknij.png', background_down='grafiki/zamknij2.png')
         close_button_bar_menu = BoxLayout(orientation='horizontal')
 
