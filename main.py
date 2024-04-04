@@ -115,10 +115,10 @@ class MainScreen(Screen):
 
     def show_menu_popup(self, instance):
         content = GridLayout(cols=1, rows=4, spacing=5)
-        button1 = Button(text='Import/Export do pliku', size_hint_y=None, height=50)
-        button2 = Button(text='Przycisk 2', size_hint_y=None, height=50)
-        button3 = Button(text='Creditsy', size_hint_y=None, height=50)
-        close_button = Button(size_hint=(None, None), size=(80, 50), background_normal='grafiki/zamknij.png', background_down='grafiki/zamknij2.png')
+        button1 = Button(text='Import/Export do pliku', size_hint_y=None, height=dp(50))
+        button2 = Button(text='Przycisk 2', size_hint_y=None, height=dp(50))
+        button3 = Button(text='Creditsy', size_hint_y=None, height=dp(50))
+        close_button = Button(size_hint=(None, None), size=(dp(80), dp(50)), background_normal='grafiki/zamknij.png', background_down='grafiki/zamknij2.png')
         close_button_bar_menu = BoxLayout(orientation='horizontal')
 
         content.add_widget(button1)
@@ -129,10 +129,7 @@ class MainScreen(Screen):
         close_button_bar_menu.add_widget(BoxLayout())
         content.add_widget(close_button_bar_menu)
 
-        popup_height = Window.height * 0.4
-        popup_width = Window.width * 0.2
-
-        popup = Popup(title='Menu', content=content, size_hint=(None, None), size=(popup_width, popup_height))
+        popup = Popup(title='Menu', content=content, size_hint=(None, None), size=(dp(200), dp(360)))
         # popup.size_hint = (0.4, 0.7)
         close_button.bind(on_release=popup.dismiss)
         popup.open()
@@ -162,10 +159,7 @@ class MainScreen(Screen):
         content.add_widget(add_audio_button)
         content.add_widget(close_button_bar_add)
 
-        popup_height = Window.height * 0.4
-        popup_width = Window.width * 0.2
-
-        popup = Popup(title="Jaką notatkę dziś chcesz dodać?", content=content, size_hint=(None, None), size=(popup_width, popup_height))
+        popup = Popup(title="Jaką notatkę dziś chcesz dodać?", content=content, size_hint=(None, None), size=(dp(200), dp(360)))
         close_button.bind(on_release=popup.dismiss)
         popup.open()
 
