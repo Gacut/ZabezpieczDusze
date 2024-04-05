@@ -201,32 +201,25 @@ class AddNoteScreen(Screen):
     def __init__(self, **kwargs):
         super(AddNoteScreen, self).__init__(**kwargs)
         
-        layout = GridLayout(cols=1, padding=[dp(20), dp(20), dp(20), dp(0)])
+        layout = GridLayout(cols=1, padding=[dp(10), dp(50), dp(10), dp(50)])
 
-        bottom_buttons_layout_text = GridLayout(cols=4, size_hint_y=None, height=dp(70), spacing=dp(5), padding=dp(5))
+        bottom_buttons_layout_text = GridLayout(cols=4, size_hint_max=(Window.width, None))
         
-        title_label = Label(text='Tytuł notatki:', size_hint_x=None, width=100, size_hint_y=None, height=30)
-        self.title_input = TextInput(size_hint_y=None, height=30, size_hint_x=None, width=Window.width / 2)
+        title_label = Label(text='Tytuł notatki:', size_hint_x=None, width=dp(100), size_hint_y=None, height=dp(30))
+        self.title_input = TextInput(size_hint_y=None, height=dp(30), size_hint_x=None, width=Window.width / 2)
 
-        content_label = Label(text='Treść notatki:', size_hint_x=None, width=100, size_hint_y=None, height=30)
+        content_label = Label(text='Treść notatki:', size_hint_x=None, width=dp(100), size_hint_y=None, height=dp(30))
         self.content_input = TextInput(size_hint_x=None, width=Window.width / 2)
 
         # Przycisk "Dodaj" ustawiony na prawej stronie na dole
-        self.add_button = Button(text='Dodaj', size_hint=(None, None), size=(100, 50), pos_hint={'right': 1})
+        self.add_button = Button(text='Dodaj', size_hint=(None, None), size=(100, 50))
         self.add_button.bind(on_release=self.add_note)
 
         self.picture_button = Button(text='Dołącz zdjęcie', size_hint=(None, None), size=(105, 50), pos_hint={'right': 1})
 
         # Przycisk "Wróć" ustawiony na lewej stronie na dole
-        back_button = Button(text='Wróć', size_hint=(None, None), size=(100, 50), pos_hint={'left': 1})
+        back_button = Button(text='Wróć', size_hint=(None, None), size=(100, 50))
         back_button.bind(on_release=self.go_back)
-
-        layout.add_widget(title_label)
-        layout.add_widget(self.title_input)
-        layout.add_widget(content_label)
-        layout.add_widget(self.content_input)
-        layout.add_widget(Label(size_hint=(None, None), width=Window.width, height=Window.height / 10))
-        layout.add_widget(bottom_buttons_layout_text)
 
         # Dodanie przycisków "Wróć", "Dołącz zdjęcie" oraz "Dodaj" na dole ekranu
         bottom_buttons_layout_text.add_widget(back_button)
@@ -235,7 +228,13 @@ class AddNoteScreen(Screen):
         bottom_buttons_layout_text.add_widget(self.picture_button)
         bottom_buttons_layout_text.add_widget(self.add_button)
 
-        
+        layout.add_widget(title_label)
+        layout.add_widget(self.title_input)
+        layout.add_widget(content_label)
+        layout.add_widget(self.content_input)
+        layout.add_widget(Label(size_hint_max=(None, dp(0.01))))
+        layout.add_widget(bottom_buttons_layout_text)
+
         self.add_text_color_background()
         self.add_widget(layout)
 
