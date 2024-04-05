@@ -205,20 +205,23 @@ class AddNoteScreen(Screen):
 
         bottom_buttons_layout_text = GridLayout(cols=4, size_hint_max=(Window.width, None))
         
-        title_label = Label(text='Tytuł notatki:', size_hint_x=None, width=dp(100), size_hint_y=None, height=dp(30))
-        self.title_input = TextInput(size_hint_y=None, height=dp(30), size_hint_x=None, width=Window.width / 2)
+        title_label = Label(text='Tytuł notatki:', size_hint_x=None, width=dp(100), 
+                            size_hint_y=None, height=dp(30))
+        
+        self.title_input = TextInput(size_hint_y=None, height=dp(30), 
+                                     size_hint_x=None, width=Window.width / 2, multiline=False)
 
         content_label = Label(text='Treść notatki:', size_hint_x=None, width=dp(100), size_hint_y=None, height=dp(30))
-        self.content_input = TextInput(size_hint_x=None, width=Window.width / 2)
+        self.content_input = TextInput(size_hint_x=None, width=(Window.width - dp(20)), size_hint_y=None, height=(Window.height - dp(250)))
 
         # Przycisk "Dodaj" ustawiony na prawej stronie na dole
-        self.add_button = Button(text='Dodaj', size_hint=(None, None), size=(100, 50))
+        self.add_button = Button(text='Dodaj', size_hint=(None, None), size=(dp(100), dp(50)))
         self.add_button.bind(on_release=self.add_note)
 
-        self.picture_button = Button(text='Dołącz zdjęcie', size_hint=(None, None), size=(105, 50), pos_hint={'right': 1})
+        self.picture_button = Button(text='Dołącz zdjęcie', size_hint=(None, None), size=(dp(100), dp(50)), pos_hint={'right': 1})
 
         # Przycisk "Wróć" ustawiony na lewej stronie na dole
-        back_button = Button(text='Wróć', size_hint=(None, None), size=(100, 50))
+        back_button = Button(text='Wróć', size_hint=(None, None), size=(dp(100), dp(50)))
         back_button.bind(on_release=self.go_back)
 
         # Dodanie przycisków "Wróć", "Dołącz zdjęcie" oraz "Dodaj" na dole ekranu
