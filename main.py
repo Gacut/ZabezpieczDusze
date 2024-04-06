@@ -136,13 +136,13 @@ class MainScreen(Screen):
 
     def show_add_popup(self, instance):
         content = BoxLayout(orientation='vertical')
-        add_text_button = Button(size_hint_y=None, height=80, background_normal='grafiki/dodajnotatketext.png', background_down='grafiki/dodajnotatketext2.png')
+        add_text_button = Button(size_hint_y=None, height=dp(80), background_normal='grafiki/dodajnotatketext.png', background_down='grafiki/dodajnotatketext2.png')
         add_text_button.bind(on_release=self.add_note_and_close_popup)
-        add_video_button = Button(size_hint_y=None, height=80, background_normal='grafiki/dodajnotatkewideo.png', background_down='grafiki/dodajnotatkewideo2.png')
+        add_video_button = Button(size_hint_y=None, height=dp(80), background_normal='grafiki/dodajnotatkewideo.png', background_down='grafiki/dodajnotatkewideo2.png')
         add_video_button.bind(on_release=self.add_video_and_close_popup)
         add_audio_button = Button(text='Dodaj notatkę audio', size_hint_y=None, height=80)
         add_video_button.bind(on_release=self.add_audio_and_close_popup)
-        close_button = Button(size_hint=(None, None), size=(80, 50), background_normal='grafiki/zamknij.png', background_down='grafiki/zamknij2.png')
+        close_button = Button(size_hint=(None, None), size=(dp(80), dp(50)), background_normal='grafiki/zamknij.png', background_down='grafiki/zamknij2.png')
         close_button_bar_add = BoxLayout(orientation='horizontal')
 
 
@@ -247,8 +247,6 @@ class AddNoteScreen(Screen):
             Color(0.027, 0.082, 0.137, 1)  # #071522
             Rectangle(pos=self.pos, size=Window.size)
 
-    import csv
-
     def add_note(self, instance):
         title = self.title_input.text
         content = self.content_input.text
@@ -260,6 +258,7 @@ class AddNoteScreen(Screen):
             popup = Popup(title='Błąd', content=Label(text='Tytuł i treść notatki nie mogą być puste.'),
                         size_hint=(None, None), size=(popup_width, popup_height))
             popup.open()
+            
         else:
             # Otwórz plik "notes.csv" w trybie dodawania (append) aby nie nadpisać istniejących notatek
             with open(notes_file, 'a', newline='') as file:
