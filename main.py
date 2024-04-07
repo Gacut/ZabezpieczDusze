@@ -290,9 +290,9 @@ class AddVideoNoteScreen(Screen):
         title_video_label = Label(text='Tytuł:', size_hint_x=None, width=100, size_hint_y=None, height=30)
         self.title_input = TextInput(size_hint_y=None, height=30, size_hint_x=None, width=Window.width / 4)
 
-        add_video_button = Button(text='Dodaj Wideo', size_hint=(None, None), size=(100, 50))
-        multimedia_label = Label(text='Ścieżka pliku wideo...', size_hint=(None, None), size=(150, 30))
-        record_video_button = Button(text='Nagraj wideo', size_hint=(None, None), size=(100, 50))
+        add_video_button = Button(text='Dodaj Wideo', size_hint=(None, None), size=(dp(100), dp(50)))
+        multimedia_label = Label(text='Ścieżka pliku wideo...', size_hint=(None, None), size=(dp(150), dp(30)))
+        record_video_button = Button(text='Nagraj wideo', size_hint=(None, None), size=(dp(100), dp(50)))
 
         button_box = BoxLayout(orientation='vertical')
         add_video_layout = BoxLayout()
@@ -304,10 +304,10 @@ class AddVideoNoteScreen(Screen):
         content_video_label = Label(text='Treść notatki:', size_hint_x=None, width=100, size_hint_y=None, height=30)
         self.content_video_input = TextInput()
 
-        self.add_multimedia_button = Button(text='Dodaj', size_hint=(None, None), size=(100, 50), pos_hint={'right': 1})
+        self.add_multimedia_button = Button(text='Dodaj', size_hint=(None, None), size=(dp(100), dp(50)), pos_hint={'right': 1})
         self.add_multimedia_button.bind(on_release=self.add_video_note)
 
-        back_video_button = Button(text='Wróć', size_hint=(None, None), size=(100, 50), pos_hint={'left': 1})
+        back_video_button = Button(text='Wróć', size_hint=(None, None), size=(dp(100), dp(50)), pos_hint={'left': 1})
         back_video_button.bind(on_release=self.go_back)
 
         layout_video.add_widget(title_video_label)
@@ -365,10 +365,10 @@ class AddAudioScreen(Screen):
         layoutMain = GridLayout(cols=1, spacing=2, padding=2)
         layout = GridLayout(cols=4, spacing=5, padding=2)
 
-        self.add_audio_button = Button(text='Dodaj', size_hint=(None, None), size=(100, 50), pos_hint={'right': 1})
+        self.add_audio_button = Button(text='Dodaj', size_hint=(None, None), size=(dp(100), dp(50)), pos_hint={'right': 1})
         self.add_audio_button.bind()
 
-        back_audio_button = Button(text='Wróć', size_hint=(None, None), size=(100, 50), pos_hint={'left': 1})
+        back_audio_button = Button(text='Wróć', size_hint=(None, None), size=(dp(100), dp(50)), pos_hint={'left': 1})
         back_audio_button.bind(on_release=self.go_back)
 
 
@@ -380,7 +380,7 @@ class AddAudioScreen(Screen):
         stop_button = Button(text='Zatrzymaj', size_hint=(None, None), size=(button_height, button_width))
         stop_button.bind(size=stop_button.setter('text_size'))
 
-        status_label = Label(text='testest', size_hint=(None, None), height=30)
+        status_label = Label(text='testest', size_hint=(None, None), height=dp(30))
 
         bottom_buttons_layout_video.add_widget(back_audio_button)
         anchor_layout_text = AnchorLayout(anchor_x='center')
