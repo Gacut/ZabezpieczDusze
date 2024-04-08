@@ -14,6 +14,27 @@ from kivy.metrics import dp
 import csv
 import os
 
+notes_layout = BoxLayout(orientation='vertical', spacing=10, size_hint_y=None)
+notes_layout.bind(minimum_height=notes_layout.setter('height'))
+
+#tworzenie pustego pliku CSV
+def create_empty_csv(self, file_name):
+    # Ustawia ścieżkę pliku taką samą, w jakiej znajduje się aplikacja
+    app_folder = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(app_folder, file_name)
+
+    if not os.path.exists(file_path):
+        with open(file_path, 'w', newline='') as file:
+            writer = csv.DictWriter(file, fieldnames=['title', 'content'])
+            writer.writeheader()
+
+def load_notes_from_csv(file_path):
+    notes = []
+    with open(file_path, 'r') as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            notes.append(row)
+    return notes
 
 class NoteWidget(BoxLayout):
     def __init__(self, note_data, **kwargs):
@@ -48,40 +69,28 @@ class NoteWidget(BoxLayout):
             self.border.add(Line(rectangle=(self.x + self.padding[0], self.y + self.padding[1], self.width - 2 * self.padding[0], self.height - 2 * self.padding[1]), width=2))
             self.canvas.before.add(self.border)
 
+
 #ekran główny
 class MainScreen(Screen):
-
-    #tworzenie pustego pliku CSV
-    def create_empty_csv(self, file_name):
-        # Ustawia ścieżkę pliku taką samą, w jakiej znajduje się aplikacja
-        app_folder = os.path.dirname(os.path.abspath(__file__))
-        file_path = os.path.join(app_folder, file_name)
-
-        if not os.path.exists(file_path):
-            with open(file_path, 'w', newline='') as file:
-                writer = csv.DictWriter(file, fieldnames=['title', 'content'])
-                writer.writeheader()
-
-
+    global load_notes_from_csv, create_empty_csv, notes_layout
 
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
 
         layout = GridLayout(cols=1, spacing=dp(10), padding=[dp(10), dp(20)])  # Ustawiamy margines górny na 20 pikseli
 
-        self.notes_layout = BoxLayout(orientation='vertical', spacing=10, size_hint_y=None)
-        self.notes_layout.bind(minimum_height=self.notes_layout.setter('height'))
+        notes_layout.bind(minimum_height=notes_layout.setter('height'))
 
         if not os.path.exists('notes.csv'):
-            self.create_empty_csv('notes.csv')
+            create_empty_csv('notes.csv')
 
-        notes = self.load_notes_from_csv('notes.csv')
+        notes = load_notes_from_csv('notes.csv')
         for note in notes:
             note_widget = NoteWidget(note)
-            self.notes_layout.add_widget(note_widget)
+            notes_layout.add_widget(note_widget)
 
         scroll_view = ScrollView()
-        scroll_view.add_widget(self.notes_layout)
+        scroll_view.add_widget(notes_layout)
 
         bottom_buttons_layout = BoxLayout(size_hint_max=(None, dp(0.01)), spacing=5)
 
@@ -105,13 +114,7 @@ class MainScreen(Screen):
         menu_button.bind(on_release=self.show_menu_popup)
         add_button.bind(on_release=self.show_add_popup)
 
-    def load_notes_from_csv(self, file_path):
-        notes = []
-        with open(file_path, 'r') as file:
-            reader = csv.DictReader(file)
-            for row in reader:
-                notes.append(row)
-        return notes
+
 
     def show_menu_popup(self, instance):
         content = GridLayout(cols=1, rows=4, spacing=5)
@@ -198,6 +201,7 @@ class MainScreen(Screen):
 
 #Ekran wprowadzania notatek tekstowych
 class AddNoteScreen(Screen):
+    global load_notes_from_csv, notes_layout
     def __init__(self, **kwargs):
         super(AddNoteScreen, self).__init__(**kwargs)
         
@@ -277,6 +281,10 @@ class AddNoteScreen(Screen):
     def go_back(self, instance):
         # Przechodzimy z powrotem do ekranu "MainScreen"
         self.manager.current = 'main'
+        notes = load_notes_from_csv('notes.csv')
+        for note in notes:
+            note_widget = NoteWidget(note)
+            notes_layout.add_widget(note_widget)
 
 #Ekran wprowadzania notatek video
 class AddVideoNoteScreen(Screen):
@@ -351,7 +359,12 @@ class AddVideoNoteScreen(Screen):
             popup.open()
 
     def go_back(self, instance):
+        # Przechodzimy z powrotem do ekranu "MainScreen"
         self.manager.current = 'main'
+        notes = load_notes_from_csv('notes.csv')
+        for note in notes:
+            note_widget = NoteWidget(note)
+            notes_layout.add_widget(note_widget)
 
 #ekran wprowadzenia notatki audio
 class AddAudioScreen(Screen):
@@ -414,7 +427,12 @@ class AddAudioScreen(Screen):
             Rectangle(pos=self.pos, size=Window.size)
 
     def go_back(self, instance):
+        # Przechodzimy z powrotem do ekranu "MainScreen"
         self.manager.current = 'main'
+        notes = load_notes_from_csv('notes.csv')
+        for note in notes:
+            note_widget = NoteWidget(note)
+            notes_layout.add_widget(note_widget)
 
 #ekran widoku notatki
 class NoteDetailsScreen(Screen):
@@ -441,7 +459,12 @@ class NoteDetailsScreen(Screen):
             Rectangle(pos=self.pos, size=Window.size)
 
     def go_back(self, instance):
+        # Przechodzimy z powrotem do ekranu "MainScreen"
         self.manager.current = 'main'
+        notes = load_notes_from_csv('notes.csv')
+        for note in notes:
+            note_widget = NoteWidget(note)
+            notes_layout.add_widget(note_widget)
 
 
 
