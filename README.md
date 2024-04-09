@@ -19,7 +19,7 @@ Podgląd aplikacji (WIP):
 Python: Kivy - frontend
 
 # Creditsy
-Frontend: ChatGPT (Głównie dlatego, że nie nawidzę programować frontu)
+Frontend: ChatGPT (Głównie dlatego, że nie nawidzę programować frontu).
 
 Grafiki: Bing.com/create
 
