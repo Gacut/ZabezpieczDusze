@@ -370,39 +370,34 @@ class AddVideoNoteScreen(Screen):
 class AddAudioScreen(Screen):
     def __init__(self, **kwargs):
         super(AddAudioScreen, self).__init__(**kwargs)
-        button_height = Window.height * 0.1
-        button_width = Window.width * 0.05
 
         bottom_buttons_layout_video = GridLayout(cols=3, size_hint_y=None, height=dp(70), spacing=dp(5))
 
         layoutMain = GridLayout(cols=1, spacing=2, padding=2)
         layout = GridLayout(cols=4, spacing=5, padding=2)
 
-        self.add_audio_button = Button(text='Dodaj', size_hint=(None, None), size=(dp(100), dp(50)), pos_hint={'right': 1})
-        self.add_audio_button.bind()
+        add_audio_button = Button(text='Dodaj', size_hint=(None, None), size=(dp(100), dp(50)), pos_hint={'right': 1})
 
         back_audio_button = Button(text='Wróć', size_hint=(None, None), size=(dp(100), dp(50)), pos_hint={'left': 1})
         back_audio_button.bind(on_release=self.go_back)
 
 
-        title_label = Label(text='Tytuł notatki:', size_hint=(None, None), height=30)
-        self.title_input = TextInput(size_hint=(0.7, None), height=30, multiline=False)
+        title_label = Label(text='Tytuł notatki:', size_hint=(None, None), height=dp(30))
+        title_input = TextInput(size_hint=(0.7, None), height=dp(30), multiline=False)
 
-        record_button = Button(text='Nagraj', size_hint=(None, None), size=(button_height, button_width))
-        record_button.bind(size=record_button.setter('text_size'))
-        stop_button = Button(text='Zatrzymaj', size_hint=(None, None), size=(button_height, button_width))
-        stop_button.bind(size=stop_button.setter('text_size'))
+        record_button = Button(text='Nagraj', size_hint=(None, None), size=(dp(100), dp(50)))
+        stop_button = Button(text='Zatrzymaj', size_hint=(None, None), size=(dp(100), dp(50)))
 
         status_label = Label(text='testest', size_hint=(None, None), height=dp(30))
 
         bottom_buttons_layout_video.add_widget(back_audio_button)
         anchor_layout_text = AnchorLayout(anchor_x='center')
         bottom_buttons_layout_video.add_widget(anchor_layout_text)
-        bottom_buttons_layout_video.add_widget(self.add_audio_button)
+        bottom_buttons_layout_video.add_widget(add_audio_button)
 
         layout.add_widget(Label(size_hint=(None, None)))
         layout.add_widget(title_label)
-        layout.add_widget(self.title_input)
+        layout.add_widget(title_input)
         layout.add_widget(Label(size_hint=(None, None)))
         layout.add_widget(Label(size_hint=(None, None)))
         layout.add_widget(record_button)
