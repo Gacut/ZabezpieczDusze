@@ -11,6 +11,8 @@ from kivy.app import App
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.metrics import dp
+from kivy.uix.filechooser import FileChooserListView
+from shutil import copyfile
 import csv
 import os
 
@@ -18,14 +20,14 @@ notes_layout = BoxLayout(orientation='vertical', spacing=10, size_hint_y=None)
 notes_layout.bind(minimum_height=notes_layout.setter('height'))
 
 #tworzenie pustego pliku CSV
-def create_empty_csv(self, file_name):
+def create_empty_csv(file_name):
     # Ustawia ścieżkę pliku taką samą, w jakiej znajduje się aplikacja
     app_folder = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(app_folder, file_name)
 
     if not os.path.exists(file_path):
         with open(file_path, 'w', newline='') as file:
-            writer = csv.DictWriter(file, fieldnames=['title', 'content'])
+            writer = csv.DictWriter(file, fieldnames=['title', 'content', 'picpath'])
             writer.writeheader()
 
 def load_notes_from_csv(file_path):
@@ -35,6 +37,9 @@ def load_notes_from_csv(file_path):
         for row in reader:
             notes.append(row)
     return notes
+
+if not os.path.exists("notes.csv'"):
+    create_empty_csv("notes.csv")
 
 class NoteWidget(BoxLayout):
     def __init__(self, note_data, **kwargs):
@@ -80,9 +85,6 @@ class MainScreen(Screen):
         layout = GridLayout(cols=1, spacing=dp(10), padding=[dp(10), dp(20)])  # Ustawiamy margines górny na 20 pikseli
 
         notes_layout.bind(minimum_height=notes_layout.setter('height'))
-
-        if not os.path.exists('notes.csv'):
-            create_empty_csv('notes.csv')
 
         notes = load_notes_from_csv('notes.csv')
         for note in notes:
@@ -204,6 +206,10 @@ class AddNoteScreen(Screen):
     global load_notes_from_csv, notes_layout
     def __init__(self, **kwargs):
         super(AddNoteScreen, self).__init__(**kwargs)
+
+        self.picture_folder = "pictures"
+        if not os.path.exists(self.picture_folder):
+            os.makedirs(self.picture_folder)
         
         layout = GridLayout(cols=1, padding=[dp(10), dp(50), dp(10), dp(50)])
 
@@ -245,6 +251,19 @@ class AddNoteScreen(Screen):
         self.add_text_color_background()
         self.add_widget(layout)
 
+        self.picture_button.bind(on_release=self.choose_picture)
+
+    def choose_picture(self, instance):
+        file_chooser = FileChooserListView()
+        file_chooser.bind(on_submit=self.copy_picture)
+        popup = Popup(title="Wybierz zdjęcie", content=file_chooser, size_hint=(None, None), size=(400, 400))
+        popup.open()
+
+    def copy_picture(self, instance, file_path, touch):
+        filename = os.path.basename(file_path[0])
+        dest_path = os.path.join(self.picture_folder, filename)
+        copyfile(file_path[0], dest_path)
+        self.picture_button.text = filename
         
     def add_text_color_background(self):
         with self.canvas.before:
