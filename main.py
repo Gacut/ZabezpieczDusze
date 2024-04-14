@@ -16,8 +16,7 @@ from shutil import copyfile
 import csv
 import os
 
-notes_layout = BoxLayout(orientation='vertical', spacing=10, size_hint_y=None)
-notes_layout.bind(minimum_height=notes_layout.setter('height'))
+
 layout = GridLayout(cols=1, spacing=dp(10), padding=[dp(10), dp(20)])  # Ustawiamy margines górny na 20 pikseli
 
 #tworzenie pustego pliku CSV
@@ -92,20 +91,20 @@ class NoteWidget(BoxLayout):
 
 #ekran główny
 class MainScreen(Screen):
-    global load_notes_from_csv, create_empty_csv, notes_layout, layout
+    global load_notes_from_csv, create_empty_csv, layout
 
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
-
-        notes_layout.bind(minimum_height=notes_layout.setter('height'))
+        self.notes_layout = BoxLayout(orientation='vertical', spacing=10, size_hint_y=None)
+        self.notes_layout.bind(minimum_height=self.notes_layout.setter('height'))
 
         notes = load_notes_from_csv('notes.csv')
         for note in notes:
             note_widget = NoteWidget(note)
-            notes_layout.add_widget(note_widget)
+            self.notes_layout.add_widget(note_widget)
 
         scroll_view = ScrollView()
-        scroll_view.add_widget(notes_layout)
+        scroll_view.add_widget(self.notes_layout)
 
         bottom_buttons_layout = BoxLayout(size_hint_max=(None, dp(0.01)), spacing=5)
 
@@ -277,6 +276,7 @@ class AddNoteScreen(Screen):
         dest_path = os.path.join(self.picture_folder, filename)
         copyfile(file_path[0], dest_path)
         self.picture_button.text = filename
+        self.picpath = dest_path
         
     def add_text_color_background(self):
         with self.canvas.before:
@@ -298,10 +298,13 @@ class AddNoteScreen(Screen):
         else:
             # Otwórz plik "notes.csv" w trybie dodawania (append) aby nie nadpisać istniejących notatek
             with open(notes_file, 'a', newline='') as file:
-                writer = csv.DictWriter(file, fieldnames=['title', 'content'])
+                writer = csv.DictWriter(file, fieldnames=['title', 'content', 'picpath'])
                 
                 # Zapisz notatkę do pliku CSV
-                writer.writerow({'title': title, 'content': content})
+                if self.picture_button.text == "Dołącz zdjęcie":
+                    writer.writerow({'title': title, 'content': content})
+                else:
+                    writer.writerow({'title': title, 'content': content, 'picpath': self.picpath})
                 
                 self.title_input.text = ''
                 self.content_input.text = ''
