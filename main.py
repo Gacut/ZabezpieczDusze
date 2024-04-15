@@ -13,6 +13,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.metrics import dp
 from kivy.uix.filechooser import FileChooserListView
 from shutil import copyfile
+from kivy.uix.image import Image
 import csv
 import os
 
@@ -77,7 +78,7 @@ class NoteWidget(BoxLayout):
             app = App.get_running_app()
             app.root.current = 'note_details'
             note_details_screen = app.root.get_screen('note_details')
-            note_details_screen.display_note_details(self.note_data)
+            note_details_screen.display_note_details(self.note_data, self.note_data.get('picpath', None))
 
     def update_canvas(self, *args):
         self.canvas.before.clear()
@@ -459,17 +460,23 @@ class NoteDetailsScreen(Screen):
         layout = GridLayout(cols=1)
         self.title_label = Label(text='', size_hint=(1, None), height=50)
         self.content_label = Label(text='', size_hint=(1, 1))
+        self.image_widget = Image(source='', size_hint=(1, 1))
         self.back_button = Button(text="Wróć", size_hint=(None, None), size=(dp(100), dp(50)))
         self.back_button.bind(on_release=self.go_back)
         layout.add_widget(self.title_label)
         layout.add_widget(self.content_label)
+        layout.add_widget(self.image_widget)
         layout.add_widget(self.back_button)
         self.add_widget(layout)
         self.add_color_background()
 
-    def display_note_details(self, note_data):
+    def display_note_details(self, note_data, picpath=None):
         self.title_label.text = note_data['title']
         self.content_label.text = note_data['content']
+        if 'pictures' in picpath:
+            self.image_widget.source = picpath
+        else:
+            pass
 
     def add_color_background(self):
         with self.canvas.before:
