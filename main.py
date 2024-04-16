@@ -221,6 +221,7 @@ class AddNoteScreen(Screen):
         super(AddNoteScreen, self).__init__(**kwargs)
 
         self.picture_folder = "pictures"
+ 
         if not os.path.exists(self.picture_folder):
             os.makedirs(self.picture_folder)
         
@@ -281,7 +282,7 @@ class AddNoteScreen(Screen):
         
     def add_text_color_background(self):
         with self.canvas.before:
-            Color(0.027, 0.082, 0.137, 1)  # #071522
+            Color(0.027, 0.082, 0.137, 1)  #071522
             Rectangle(pos=self.pos, size=Window.size)
 
     def add_note(self, instance):
@@ -457,17 +458,24 @@ class AddAudioScreen(Screen):
 class NoteDetailsScreen(Screen):
     def __init__(self, **kwargs):
         super(NoteDetailsScreen, self).__init__(**kwargs)
+        layout_main = GridLayout(cols=2, padding=[dp(40)])
         layout = GridLayout(cols=1)
-        self.title_label = Label(text='', size_hint=(1, None), height=50)
-        self.content_label = Label(text='', size_hint=(1, 1))
+        self.title_label = Label(text='', size_hint=(1, None), height=dp(50))
+        self.content_scrollview = ScrollView(size_hint=(dp(0.01), dp(40)))
+        self.content_label = Label(text='', size_hint_y=None, font_size=dp(16), padding=(dp(10), dp(10)))
+        self.content_label.bind(size=self.content_label.setter('text_size'))
+        self.content_scrollview.add_widget(self.content_label)
         self.image_widget = Image(source='', size_hint=(1, 1))
         self.back_button = Button(text="Wróć", size_hint=(None, None), size=(dp(100), dp(50)))
         self.back_button.bind(on_release=self.go_back)
+
+        layout.add_widget(Label(size_hint=(0.01, 0.20)))
         layout.add_widget(self.title_label)
-        layout.add_widget(self.content_label)
-        layout.add_widget(self.image_widget)
+        layout.add_widget(self.content_scrollview)
         layout.add_widget(self.back_button)
-        self.add_widget(layout)
+        layout_main.add_widget(layout)
+        layout_main.add_widget(self.image_widget)
+        self.add_widget(layout_main)
         self.add_color_background()
 
     def display_note_details(self, note_data, picpath=None):
@@ -476,7 +484,7 @@ class NoteDetailsScreen(Screen):
         if 'pictures' in picpath:
             self.image_widget.source = picpath
         else:
-            pass
+            self.image_widget.source = 'grafiki/nophoto.jpg'
 
     def add_color_background(self):
         with self.canvas.before:
