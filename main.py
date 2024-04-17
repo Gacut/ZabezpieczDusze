@@ -14,29 +14,51 @@ from kivy.metrics import dp
 from kivy.uix.filechooser import FileChooserListView
 from shutil import copyfile
 from kivy.uix.image import Image
-import csv
+# import csv
+import json
 import os
 
 
 layout = GridLayout(cols=1, spacing=dp(10), padding=[dp(10), dp(20)])  # Ustawiamy margines górny na 20 pikseli
 
-#tworzenie pustego pliku CSV
-def create_empty_csv(file_name):
+def create_empty_json(file_name):
     # Ustawia ścieżkę pliku taką samą, w jakiej znajduje się aplikacja
     app_folder = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(app_folder, file_name)
 
     if not os.path.exists(file_path):
-        with open(file_path, 'w', newline='') as file:
-            writer = csv.DictWriter(file, fieldnames=['title', 'content', 'picpath'])
-            writer.writeheader()
+        with open(file_path, 'w') as file:
+            json.dump([], file)
 
-def load_notes_from_csv(file_path):
+# #tworzenie pustego pliku CSV
+# def create_empty_csv(file_name):
+#     # Ustawia ścieżkę pliku taką samą, w jakiej znajduje się aplikacja
+#     app_folder = os.path.dirname(os.path.abspath(__file__))
+#     file_path = os.path.join(app_folder, file_name)
+
+#     if not os.path.exists(file_path):
+#         with open(file_path, 'w', newline='') as file:
+#             writer = csv.DictWriter(file, fieldnames=['title', 'content', 'picpath'])
+#             writer.writeheader()
+
+# def load_notes_from_csv(file_path):
+#     notes = []
+#     with open(file_path, 'r') as file:
+#         reader = csv.DictReader(file)
+#         for row in reader:
+#             notes.append(row)
+#     return notes
+
+def load_notes_from_json(file_path):
     notes = []
-    with open(file_path, 'r') as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            notes.append(row)
+    if os.path.exists(file_path):
+        with open(file_path, 'r') as file:
+            try:
+                notes_data = json.load(file)
+            except json.decoder.JSONDecodeError:
+                notes_data = []
+        for note in notes_data:
+            notes.append(note)
     return notes
 
 def clear_main_screen():
@@ -45,15 +67,15 @@ def clear_main_screen():
 
 def update_main_screen_notes():
     clear_main_screen()
-    notes = load_notes_from_csv('notes.csv')
+    notes = load_notes_from_json('notes.json')
     main_screen = App.get_running_app().root.get_screen('main')
     for note in notes:
         note_widget = NoteWidget(note)
         main_screen.notes_layout.add_widget(note_widget)
 
 
-if not os.path.exists("notes.csv'"):
-    create_empty_csv("notes.csv")
+if not os.path.exists("notes.json'"):
+    create_empty_json("notes.json")
 
 class NoteWidget(BoxLayout):
     def __init__(self, note_data, **kwargs):
@@ -92,14 +114,14 @@ class NoteWidget(BoxLayout):
 
 #ekran główny
 class MainScreen(Screen):
-    global load_notes_from_csv, create_empty_csv, layout
+    global load_notes_from_json, layout
 
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
         self.notes_layout = BoxLayout(orientation='vertical', spacing=10, size_hint_y=None)
         self.notes_layout.bind(minimum_height=self.notes_layout.setter('height'))
 
-        notes = load_notes_from_csv('notes.csv')
+        notes = load_notes_from_json('notes.json')
         for note in notes:
             note_widget = NoteWidget(note)
             self.notes_layout.add_widget(note_widget)
@@ -216,7 +238,7 @@ class MainScreen(Screen):
 
 #Ekran wprowadzania notatek tekstowych
 class AddNoteScreen(Screen):
-    global load_notes_from_csv, notes_layout
+    global load_notes_from_json, notes_layout
     def __init__(self, **kwargs):
         super(AddNoteScreen, self).__init__(**kwargs)
 
@@ -285,10 +307,31 @@ class AddNoteScreen(Screen):
             Color(0.027, 0.082, 0.137, 1)  #071522
             Rectangle(pos=self.pos, size=Window.size)
 
+    def add_note_to_json(self, file_path, title, content, picpath=None):
+        note = {'title': title, 'content': content, 'picpath': picpath}
+        if picpath != None:
+            note['picpath'] = picpath
+
+        if os.path.exists(file_path):
+            with open(file_path, 'r') as file:
+                notes = json.load(file)
+        else:
+            notes = []
+
+        notes.append(note)
+
+        with open(file_path, 'w') as file:
+            json.dump(notes, file)
+
+        popup = Popup(title='Sukces', content=Label(text='Notatka została dodana.'),
+                    size_hint=(None, None), size=(dp(200), dp(200)))
+        popup.open()
+
     def add_note(self, instance):
         title = self.title_input.text
         content = self.content_input.text
-        notes_file = "notes.csv"
+        picpath = "pictures/" + str(self.picture_button.text)
+        notes_file = "notes.json"
         popup_height = Window.height * 0.2
         popup_width = Window.width * 0.4
 
@@ -298,22 +341,12 @@ class AddNoteScreen(Screen):
             popup.open()
             
         else:
-            # Otwórz plik "notes.csv" w trybie dodawania (append) aby nie nadpisać istniejących notatek
-            with open(notes_file, 'a', newline='') as file:
-                writer = csv.DictWriter(file, fieldnames=['title', 'content', 'picpath'])
-                
-                # Zapisz notatkę do pliku CSV
-                if self.picture_button.text == "Dołącz zdjęcie":
-                    writer.writerow({'title': title, 'content': content})
-                else:
-                    writer.writerow({'title': title, 'content': content, 'picpath': self.picpath})
-                
-                self.title_input.text = ''
-                self.content_input.text = ''
-                popup = Popup(title='Sukces', content=Label(text='Notatka została dodana.'),
-                            size_hint=(None, None), size=(popup_width, popup_height))
-                popup.open()
-
+            if "Dołącz" in picpath:
+                self.add_note_to_json(notes_file, title, content)
+            else:
+                self.add_note_to_json(notes_file, title, content, picpath)
+            self.title_input.text = ''
+            self.content_input.text = ''
 
     def go_back(self, instance):
         self.manager.current = 'main'
@@ -481,10 +514,10 @@ class NoteDetailsScreen(Screen):
     def display_note_details(self, note_data, picpath=None):
         self.title_label.text = note_data['title']
         self.content_label.text = note_data['content']
-        if 'pictures' in picpath:
-            self.image_widget.source = picpath
-        else:
+        if picpath is None:
             self.image_widget.source = 'grafiki/nophoto.jpg'
+        else:
+            self.image_widget.source = picpath
 
     def add_color_background(self):
         with self.canvas.before:
