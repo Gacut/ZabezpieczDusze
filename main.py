@@ -4,6 +4,7 @@ from kivy.uix.button import Button
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
+from kivy.effects.scroll import ScrollEffect
 from kivy.uix.textinput import TextInput
 from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle, InstructionGroup, Line
@@ -29,25 +30,6 @@ def create_empty_json(file_name):
     if not os.path.exists(file_path):
         with open(file_path, 'w') as file:
             json.dump([], file)
-
-# #tworzenie pustego pliku CSV
-# def create_empty_csv(file_name):
-#     # Ustawia ścieżkę pliku taką samą, w jakiej znajduje się aplikacja
-#     app_folder = os.path.dirname(os.path.abspath(__file__))
-#     file_path = os.path.join(app_folder, file_name)
-
-#     if not os.path.exists(file_path):
-#         with open(file_path, 'w', newline='') as file:
-#             writer = csv.DictWriter(file, fieldnames=['title', 'content', 'picpath'])
-#             writer.writeheader()
-
-# def load_notes_from_csv(file_path):
-#     notes = []
-#     with open(file_path, 'r') as file:
-#         reader = csv.DictReader(file)
-#         for row in reader:
-#             notes.append(row)
-#     return notes
 
 def load_notes_from_json(file_path):
     notes = []
@@ -317,7 +299,6 @@ class AddNoteScreen(Screen):
                 notes = json.load(file)
         else:
             notes = []
-
         notes.append(note)
 
         with open(file_path, 'w') as file:
@@ -325,6 +306,7 @@ class AddNoteScreen(Screen):
 
         popup = Popup(title='Sukces', content=Label(text='Notatka została dodana.'),
                     size_hint=(None, None), size=(dp(200), dp(200)))
+        self.picture_button.text = "Dołącz zdjęcie"
         popup.open()
 
     def add_note(self, instance):
@@ -494,9 +476,9 @@ class NoteDetailsScreen(Screen):
         layout_main = GridLayout(cols=2, padding=[dp(40)])
         layout = GridLayout(cols=1)
         self.title_label = Label(text='', size_hint=(1, None), height=dp(50))
-        self.content_scrollview = ScrollView(size_hint=(dp(0.01), dp(40)))
-        self.content_label = Label(text='', size_hint_y=None, font_size=dp(16), padding=(dp(10), dp(10)))
-        self.content_label.bind(size=self.content_label.setter('text_size'))
+        self.content_scrollview = ScrollView()
+        self.content_label = Label(text='', size_hint_y=2, font_size=dp(16), padding=(dp(10), dp(10)))
+        self.content_label.bind(size=self.update_text_size)
         self.content_scrollview.add_widget(self.content_label)
         self.image_widget = Image(source='', size_hint=(1, 1))
         self.back_button = Button(text="Wróć", size_hint=(None, None), size=(dp(100), dp(50)))
@@ -510,6 +492,9 @@ class NoteDetailsScreen(Screen):
         layout_main.add_widget(self.image_widget)
         self.add_widget(layout_main)
         self.add_color_background()
+
+    def update_text_size(self, *args):
+        self.content_label.text_size = (self.content_label.width, self.content_label.height)
 
     def display_note_details(self, note_data, picpath=None):
         self.title_label.text = note_data['title']
@@ -527,7 +512,6 @@ class NoteDetailsScreen(Screen):
     def go_back(self, instance):
         self.manager.current = 'main'
         update_main_screen_notes()
-
 
 
 class NoteApp(App):
