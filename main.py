@@ -15,7 +15,6 @@ from kivy.metrics import dp
 from kivy.uix.filechooser import FileChooserListView
 from shutil import copyfile
 from kivy.uix.image import Image
-# import csv
 import json
 import os
 
@@ -138,7 +137,7 @@ class MainScreen(Screen):
     def show_menu_popup(self, instance):
         content = GridLayout(cols=1, rows=4, spacing=5)
         button1 = Button(text='Import/Export do pliku', size_hint_y=None, height=dp(50))
-        button2 = Button(text='Przycisk 2', size_hint_y=None, height=dp(50))
+        button2 = Button(text='Szukaj(??)', size_hint_y=None, height=dp(50))
         button3 = Button(text='Creditsy', size_hint_y=None, height=dp(50))
         close_button = Button(size_hint=(None, None), size=(dp(80), dp(50)), background_normal='grafiki/zamknij.png', background_down='grafiki/zamknij2.png')
         close_button_bar_menu = BoxLayout(orientation='horizontal')
