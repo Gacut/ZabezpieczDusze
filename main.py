@@ -166,7 +166,6 @@ class MainScreen(Screen):
         close_button = Button(size_hint=(None, None), size=(dp(80), dp(50)), background_normal='grafiki/zamknij.png', background_down='grafiki/zamknij2.png')
         close_button_bar_add = BoxLayout(orientation='horizontal')
 
-
         # Dodajemy akcje przycisku "Dodaj notatkę tekstową" oraz "Dodaj notatkę video"
         add_text_button.bind(on_release=self.show_add_note_screen)
         add_video_button.bind(on_release=self.show_add_video_screen)
@@ -438,25 +437,18 @@ class AddAudioScreen(Screen):
         bottom_buttons_layout_video.add_widget(anchor_layout_text)
         bottom_buttons_layout_video.add_widget(add_audio_button)
 
-        layout.add_widget(Label(size_hint=(None, None)))
+    
         layout.add_widget(title_label)
         layout.add_widget(title_input)
-        layout.add_widget(Label(size_hint=(None, None)))
-        layout.add_widget(Label(size_hint=(None, None)))
         layout.add_widget(record_button)
         layout.add_widget(stop_button)
-        layout.add_widget(Label(size_hint=(None, None)))
-        layout.add_widget(Label(size_hint=(None, None)))
         layout.add_widget(status_label)
-        layout.add_widget(Label(size_hint=(None, None)))
-        layout.add_widget(Label(size_hint=(None, None)))
-        layout.add_widget(Label(size_hint=(None, None)))
         layout.add_widget(bottom_buttons_layout_video)
-        layout.add_widget(Label(size_hint=(None, None)))
         layoutMain.add_widget(layout)
 
-        self.add_color_background()
         self.add_widget(layoutMain)
+        self.add_color_background()
+        
 
 
     def add_color_background(self):
