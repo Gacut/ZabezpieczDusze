@@ -413,10 +413,9 @@ class AddAudioScreen(Screen):
     def __init__(self, **kwargs):
         super(AddAudioScreen, self).__init__(**kwargs)
 
-        bottom_buttons_layout_video = GridLayout(cols=3, size_hint_y=None, height=dp(70), spacing=dp(5))
+        bottom_buttons_layout_audio = GridLayout(cols=3, size_hint_y=None, height=dp(70), spacing=dp(5))
 
-        layoutMain = GridLayout(cols=1, spacing=2, padding=2)
-        layout = GridLayout(cols=4, spacing=5, padding=2)
+        layout = GridLayout(cols=2, spacing=5, padding=2)
 
         add_audio_button = Button(text='Dodaj', size_hint=(None, None), size=(dp(100), dp(50)), pos_hint={'right': 1})
 
@@ -430,25 +429,18 @@ class AddAudioScreen(Screen):
         record_button = Button(text='Nagraj', size_hint=(None, None), size=(dp(100), dp(50)))
         stop_button = Button(text='Zatrzymaj', size_hint=(None, None), size=(dp(100), dp(50)))
 
-        status_label = Label(text='testest', size_hint=(None, None), height=dp(30))
-
-        bottom_buttons_layout_video.add_widget(back_audio_button)
-        anchor_layout_text = AnchorLayout(anchor_x='center')
-        bottom_buttons_layout_video.add_widget(anchor_layout_text)
-        bottom_buttons_layout_video.add_widget(add_audio_button)
+        bottom_buttons_layout_audio.add_widget(back_audio_button)
+        bottom_buttons_layout_audio.add_widget(Label(size_hint=(1, None)))
+        bottom_buttons_layout_audio.add_widget(add_audio_button)
 
     
         layout.add_widget(title_label)
         layout.add_widget(title_input)
         layout.add_widget(record_button)
         layout.add_widget(stop_button)
-        layout.add_widget(status_label)
-        layout.add_widget(bottom_buttons_layout_video)
-        layoutMain.add_widget(layout)
-
-        self.add_widget(layoutMain)
+        layout.add_widget(bottom_buttons_layout_audio)
         self.add_color_background()
-        
+        self.add_widget(layout)
 
 
     def add_color_background(self):
