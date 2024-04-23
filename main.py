@@ -15,6 +15,7 @@ from kivy.metrics import dp
 from kivy.uix.filechooser import FileChooserListView
 from shutil import copyfile
 from kivy.uix.image import Image
+from kivy.uix.spinner import Spinner
 import json
 import os
 
@@ -226,9 +227,12 @@ class AddNoteScreen(Screen):
  
         if not os.path.exists(self.picture_folder):
             os.makedirs(self.picture_folder)
-        
-        layout = GridLayout(cols=1, padding=[dp(10), dp(50), dp(10), dp(50)])
 
+        options = ['Wspomnienie', 'Marzenia', 'Przeżycia', 'Opis Dnia']
+        
+        #layouty
+        title_layout = GridLayout(cols=2)
+        layout = GridLayout(cols=1, padding=[dp(10), dp(50), dp(10), dp(50)])
         bottom_buttons_layout_text = GridLayout(cols=4, size_hint_max=(Window.width, None))
         
         title_label = Label(text='Tytuł notatki:', size_hint_x=None, width=dp(100), 
@@ -239,6 +243,9 @@ class AddNoteScreen(Screen):
 
         content_label = Label(text='Treść notatki:', size_hint_x=None, width=dp(100), size_hint_y=None, height=dp(30))
         self.content_input = TextInput(size_hint_x=None, width=(Window.width - dp(20)), size_hint_y=None, height=(Window.height - dp(250)))
+
+        self.spinner = Spinner(text='Wybierz rodzaj notatki', values=options, size_hint=(None, None), size=(dp(200), dp(50)))
+        # spinner.bind(text=self.on_spinner_select)
 
         # Przycisk "Dodaj" ustawiony na prawej stronie na dole
         self.add_button = Button(text='Dodaj', size_hint=(None, None), size=(dp(100), dp(50)))
@@ -257,12 +264,17 @@ class AddNoteScreen(Screen):
         bottom_buttons_layout_text.add_widget(self.picture_button)
         bottom_buttons_layout_text.add_widget(self.add_button)
 
-        layout.add_widget(title_label)
-        layout.add_widget(self.title_input)
+        title_layout.add_widget(title_label)
+        title_layout.add_widget(Label())
+        title_layout.add_widget(self.title_input)
+        title_layout.add_widget(self.spinner)
+        layout.add_widget(title_layout)
+        layout.add_widget(Label())
         layout.add_widget(content_label)
         layout.add_widget(self.content_input)
         layout.add_widget(Label(size_hint_max=(None, dp(0.01))))
         layout.add_widget(bottom_buttons_layout_text)
+        
 
         self.add_text_color_background()
         self.add_widget(layout)
@@ -287,8 +299,8 @@ class AddNoteScreen(Screen):
             Color(0.027, 0.082, 0.137, 1)  #071522
             Rectangle(pos=self.pos, size=Window.size)
 
-    def add_note_to_json(self, file_path, title, content, picpath=None):
-        note = {'title': title, 'content': content, 'picpath': picpath}
+    def add_note_to_json(self, file_path, title, content, tag, picpath=None):
+        note = {'title': title, 'content': content, 'picpath': picpath, 'tag': tag}
         if picpath != None:
             note['picpath'] = picpath
 
@@ -311,6 +323,8 @@ class AddNoteScreen(Screen):
         title = self.title_input.text
         content = self.content_input.text
         picpath = "pictures/" + str(self.picture_button.text)
+        tag = self.spinner.text
+
         notes_file = "notes.json"
         popup_height = Window.height * 0.2
         popup_width = Window.width * 0.4
@@ -319,12 +333,17 @@ class AddNoteScreen(Screen):
             popup = Popup(title='Błąd', content=Label(text='Tytuł i treść notatki nie mogą być puste.'),
                         size_hint=(None, None), size=(popup_width, popup_height))
             popup.open()
-            
+
+        if tag == 'Wybierz rodzaj notatki':
+            popup = Popup(title='Błąd', content=Label(text='Musisz wybrać rodzaj notatki'),
+                        size_hint=(None, None), size=(popup_width, popup_height))
+            popup.open()
+        
         else:
             if "Dołącz" in picpath:
-                self.add_note_to_json(notes_file, title, content)
+                self.add_note_to_json(notes_file, title, content, tag)
             else:
-                self.add_note_to_json(notes_file, title, content, picpath)
+                self.add_note_to_json(notes_file, title, content, picpath, tag)
             self.title_input.text = ''
             self.content_input.text = ''
 
