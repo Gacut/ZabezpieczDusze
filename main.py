@@ -432,9 +432,12 @@ class AddAudioScreen(Screen):
     def __init__(self, **kwargs):
         super(AddAudioScreen, self).__init__(**kwargs)
 
-        bottom_buttons_layout_audio = GridLayout(cols=3, size_hint_y=None, height=dp(70), spacing=dp(5))
+        #layouty
 
-        layout = GridLayout(cols=2, spacing=5, padding=2)
+        bottom_buttons_layout_audio = GridLayout(cols=3, size_hint_y=None, height=dp(70), spacing=dp(5))
+        title_layout = GridLayout(cols=2)
+        record_buttons_layout = GridLayout(cols=4, row_default_height=3, row_force_default=True)
+        layout = GridLayout(cols=1, spacing=-20, padding=40)
 
         add_audio_button = Button(text='Dodaj', size_hint=(None, None), size=(dp(100), dp(50)), pos_hint={'right': 1})
 
@@ -445,18 +448,24 @@ class AddAudioScreen(Screen):
         title_label = Label(text='Tytuł notatki:', size_hint=(None, None), height=dp(30))
         title_input = TextInput(size_hint=(0.7, None), height=dp(30), multiline=False)
 
-        record_button = Button(text='Nagraj', size_hint=(None, None), size=(dp(100), dp(50)))
-        stop_button = Button(text='Zatrzymaj', size_hint=(None, None), size=(dp(100), dp(50)))
+        record_button = Button(text='Nagraj', size_hint=(1, None), size=(dp(100), dp(50)))
+        stop_button = Button(text='Zatrzymaj', size_hint=(1, None), size=(dp(100), dp(50)))
 
         bottom_buttons_layout_audio.add_widget(back_audio_button)
         bottom_buttons_layout_audio.add_widget(Label(size_hint=(1, None)))
         bottom_buttons_layout_audio.add_widget(add_audio_button)
 
+        title_layout.add_widget(title_label)
+        title_layout.add_widget(title_input)
+
+        record_buttons_layout.add_widget(Label())
+        record_buttons_layout.add_widget(record_button)
+        record_buttons_layout.add_widget(stop_button)
+        record_buttons_layout.add_widget(Label())
+
     
-        layout.add_widget(title_label)
-        layout.add_widget(title_input)
-        layout.add_widget(record_button)
-        layout.add_widget(stop_button)
+        layout.add_widget(title_layout)
+        layout.add_widget(record_buttons_layout)
         layout.add_widget(bottom_buttons_layout_audio)
         self.add_color_background()
         self.add_widget(layout)
