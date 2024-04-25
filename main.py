@@ -228,18 +228,17 @@ class AddNoteScreen(Screen):
         if not os.path.exists(self.picture_folder):
             os.makedirs(self.picture_folder)
 
-        options = ['Wspomnienie', 'Marzenia', 'Przeżycia', 'Opis Dnia']
+        options = ['Wspomnienie', 'Marzenia', 'Przeżycia', 'Opis Dnia', 'Światopogląd', 'Polityka']
         
         #layouty
         title_layout = GridLayout(cols=2)
         layout = GridLayout(cols=1, padding=[dp(10), dp(50), dp(10), dp(50)])
         bottom_buttons_layout_text = GridLayout(cols=4, size_hint_max=(Window.width, None))
         
-        title_label = Label(text='Tytuł notatki:', size_hint_x=None, width=dp(100), 
-                            size_hint_y=None, height=dp(30))
+        title_label = Label(text='Tytuł notatki:',size_hint_x=None, width=dp(100), size_hint_y=None, height=dp(30))
         
         self.title_input = TextInput(size_hint_y=None, height=dp(30), 
-                                     size_hint_x=None, width=Window.width / 2, multiline=False)
+                                     size_hint_x=None, width=dp(Window.width / 2), multiline=False)
 
         content_label = Label(text='Treść notatki:', size_hint_x=None, width=dp(100), size_hint_y=None, height=dp(30))
         self.content_input = TextInput(size_hint_x=None, width=(Window.width - dp(20)), size_hint_y=None, height=(Window.height - dp(250)))
@@ -357,12 +356,10 @@ class AddVideoNoteScreen(Screen):
         super(AddVideoNoteScreen, self).__init__(**kwargs)
 
         layout_video = GridLayout(cols=1, spacing=dp(2), padding=[dp(20)])
-
         bottom_buttons_layout_video = GridLayout(cols=3, size_hint_y=None, height=dp(70), spacing=dp(5))
 
-        title_video_label = Label(text='Tytuł:', size_hint_x=None, width=100, size_hint_y=None, height=30)
-        self.title_input = TextInput(size_hint_y=None, height=30, size_hint_x=None, width=Window.width / 4)
-
+        title_video_label = Label(text='Tytuł:', size_hint_x=None, width=dp(100), size_hint_y=None, height=dp(30))
+        self.title_input = TextInput(size_hint_y=None, height=dp(30), size_hint_x=None, width=dp(Window.width / 4))
         add_video_button = Button(text='Dodaj Wideo', size_hint=(None, None), size=(dp(100), dp(50)))
         multimedia_label = Label(text='Ścieżka pliku wideo...', size_hint=(None, None), size=(dp(150), dp(30)))
         record_video_button = Button(text='Nagraj wideo', size_hint=(None, None), size=(dp(100), dp(50)))
