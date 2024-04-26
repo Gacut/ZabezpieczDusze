@@ -69,6 +69,11 @@ class NoteWidget(BoxLayout):
         self.note_data = note_data
         notatka = Label(text=note_data['title'])
         self.add_widget(notatka)
+        if self.note_data.get('tag') == 'Wspomnienie':
+            self.add_widget(Label(text='Wspomnienie'))
+        else:
+            pass
+
         self.bind(on_touch_down=self.on_click)
 
         self.bind(pos=self.update_canvas)
