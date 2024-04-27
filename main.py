@@ -69,8 +69,13 @@ class NoteWidget(BoxLayout):
         self.note_data = note_data
         notatka = Label(text=note_data['title'])
         self.add_widget(notatka)
-        if self.note_data.get('tag') == 'Wspomnienie':
-            self.add_widget(Label(text='Wspomnienie'))
+
+        if self.note_data.get('picpath') and 'grafiki' not in self.note_data.get('picpath'):
+            self.add_widget(Label(text='Zdjecia', font_size='11sp'))
+            
+        if self.note_data.get('tag'):
+            self.add_widget(Label(text=str(self.note_data.get('tag')), font_size='11sp'))
+
         else:
             pass
 
@@ -304,7 +309,7 @@ class AddNoteScreen(Screen):
             Rectangle(pos=self.pos, size=Window.size)
 
     def add_note_to_json(self, file_path, title, content, tag, picpath=None):
-        note = {'title': title, 'content': content, 'picpath': picpath, 'tag': tag}
+        note = {'title': title, 'content': content,'tag': tag,  'picpath': picpath, }
         if picpath != None:
             note['picpath'] = picpath
 
@@ -347,7 +352,7 @@ class AddNoteScreen(Screen):
             if "Dołącz" in picpath:
                 self.add_note_to_json(notes_file, title, content, tag)
             else:
-                self.add_note_to_json(notes_file, title, content, picpath, tag)
+                self.add_note_to_json(notes_file, title, content, tag, picpath)
             self.title_input.text = ''
             self.content_input.text = ''
 
