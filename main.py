@@ -143,7 +143,18 @@ class MainScreen(Screen):
         menu_button.bind(on_release=self.show_menu_popup)
         add_button.bind(on_release=self.show_add_popup)
 
+    def refresh_notes(self):
+        # Wczytaj notatki z pliku notes.json
+        with open('notes.json', 'r') as file:
+            notes = json.load(file)
 
+        # Usuń istniejące notatki z GridLayout
+        self.notes_layout.clear_widgets()
+
+        # Dodaj nowe notatki do GridLayout
+        for note in notes:
+            note_widget = NoteWidget(note)
+            self.notes_layout.add_widget(note_widget)
 
     def show_menu_popup(self, instance):
         content = GridLayout(cols=1, rows=4, spacing=5)
@@ -491,25 +502,55 @@ class AddAudioScreen(Screen):
 class NoteDetailsScreen(Screen):
     def __init__(self, **kwargs):
         super(NoteDetailsScreen, self).__init__(**kwargs)
+        delete_layout = GridLayout(cols=4, padding=[dp(40)])
         layout_main = GridLayout(cols=2, padding=[dp(40)])
         layout = GridLayout(cols=1)
+
         self.title_label = Label(text='', size_hint=(1, None), height=dp(50))
         self.content_scrollview = ScrollView()
-        self.content_label = Label(text='', size_hint_y=2, font_size=dp(16), padding=(dp(10), dp(10)))
+        self.content_label = Label(text='', size_hint_y=None, font_size=dp(16), padding=(dp(10), dp(10)))
         self.content_label.bind(size=self.update_text_size)
         self.content_scrollview.add_widget(self.content_label)
         self.image_widget = Image(source='', size_hint=(1, 1))
         self.back_button = Button(text="Wróć", size_hint=(None, None), size=(dp(100), dp(50)))
         self.back_button.bind(on_release=self.go_back)
+        self.delete_button = Button(text="Usuń", size_hint=(None, None), size=(dp(100), dp(50)))
+        self.delete_button.bind(on_release=self.delete_note)
 
         layout.add_widget(Label(size_hint=(0.01, 0.20)))
         layout.add_widget(self.title_label)
         layout.add_widget(self.content_scrollview)
         layout.add_widget(self.back_button)
+        delete_layout.add_widget(Label())
+        delete_layout.add_widget(Label())
+        delete_layout.add_widget(Label())
+        delete_layout.add_widget(self.delete_button)
         layout_main.add_widget(layout)
         layout_main.add_widget(self.image_widget)
+        self.add_widget(delete_layout)
         self.add_widget(layout_main)
         self.add_color_background()
+
+
+
+    def delete_note(self, instance):
+            title = self.title_label.text
+
+            with open('notes.json', 'r') as file:
+                notes = json.load(file)
+
+            for note in notes:
+                if note['title'] == title:
+                    notes.remove(note)
+                    break
+
+            with open('notes.json', 'w') as file:
+                json.dump(notes, file)
+
+            self.manager.current = 'main'
+
+            self.manager.get_screen('main').refresh_notes()
+
 
     def update_text_size(self, *args):
         self.content_label.text_size = (self.content_label.width, self.content_label.height)
