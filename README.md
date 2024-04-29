@@ -8,7 +8,7 @@ Zebrane wpisy mogą być wyeksportowane na nośnik zewnętrzny, otwierając moż
 
 Planuję także stworzyć aplikację AI, która pozwoli na import danych z ZabezpieczDuszę i przetrenuje je tak, aby odzwierciedlała zachowania i preferencje użytkownika.
 Wszystko to miałoby formę chatbota wytrenowanego na podstawie danych z ZabezpieczDuszę.
-Ale to dopiero, gdy opanuję temat związany z AI chatbotami i modelami.
+Ale to dopiero, gdy opanuję temat związany z AI chatbotami i modelami na podstawie wprowadzanych danych.
 
 Podgląd aplikacji (WIP):
 
