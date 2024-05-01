@@ -385,8 +385,8 @@ class AddVideoNoteScreen(Screen):
         multimedia_label = Label(text='Ścieżka pliku wideo...', size_hint=(None, None), size=(dp(150), dp(30)))
         record_video_button = Button(text='Nagraj wideo', size_hint=(None, None), size=(dp(100), dp(50)))
 
-        button_box = BoxLayout(orientation='vertical')
-        add_video_layout = BoxLayout()
+        button_box = GridLayout(cols=2)
+        add_video_layout = GridLayout(cols=2)
         add_video_layout.add_widget(add_video_button)
         add_video_layout.add_widget(multimedia_label)
         button_box.add_widget(add_video_layout)
