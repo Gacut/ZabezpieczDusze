@@ -382,7 +382,7 @@ class AddVideoNoteScreen(Screen):
         title_video_label = Label(text='Tytuł:', size_hint_x=None, width=dp(100), size_hint_y=None, height=dp(30))
         self.title_input = TextInput(size_hint_y=None, height=dp(30), size_hint_x=None, width=dp(Window.width / 4))
         add_video_button = Button(text='Dodaj Wideo', size_hint=(None, None), size=(dp(100), dp(50)))
-        multimedia_label = Label(text='Ścieżka pliku wideo...', size_hint=(None, None), size=(dp(150), dp(30)))
+        multimedia_label = Label(text='Ścieżka pliku wideo:', size_hint=(None, None), size=(dp(150), dp(30)))
         record_video_button = Button(text='Nagraj wideo', size_hint=(None, None), size=(dp(100), dp(50)))
 
         button_box = GridLayout(cols=2)
