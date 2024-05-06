@@ -376,24 +376,19 @@ class AddVideoNoteScreen(Screen):
     def __init__(self, **kwargs):
         super(AddVideoNoteScreen, self).__init__(**kwargs)
 
-        layout_video = GridLayout(cols=1, spacing=dp(2), padding=[dp(20)])
+        main_layout = GridLayout(cols=1, padding=[dp(10), dp(50), dp(10), dp(50)])
+        layout_video = GridLayout(cols=2)
         bottom_buttons_layout_video = GridLayout(cols=3, size_hint_y=None, height=dp(70), spacing=dp(5))
 
         title_video_label = Label(text='Tytuł:', size_hint_x=None, width=dp(100), size_hint_y=None, height=dp(30))
-        self.title_input = TextInput(size_hint_y=None, height=dp(30), size_hint_x=None, width=dp(Window.width / 4))
+        self.title_input = TextInput(size_hint_y=None, height=dp(30), 
+                                     size_hint_x=None, width=dp(Window.width / 2), multiline=False)
         add_video_button = Button(text='Dodaj Wideo', size_hint=(None, None), size=(dp(100), dp(50)))
         multimedia_label = Label(text='Ścieżka pliku wideo:', size_hint=(None, None), size=(dp(150), dp(30)))
         record_video_button = Button(text='Nagraj wideo', size_hint=(None, None), size=(dp(100), dp(50)))
 
-        button_box = GridLayout(cols=2)
-        add_video_layout = GridLayout(cols=2)
-        add_video_layout.add_widget(add_video_button)
-        add_video_layout.add_widget(multimedia_label)
-        button_box.add_widget(add_video_layout)
-        button_box.add_widget(record_video_button)
-
         content_video_label = Label(text='Treść notatki:', size_hint_x=None, width=100, size_hint_y=None, height=30)
-        self.content_video_input = TextInput()
+        self.content_video_input = TextInput(size_hint_x=None, width=(Window.width - dp(20)), size_hint_y=None, height=(Window.height - dp(400)))
 
         self.add_multimedia_button = Button(text='Dodaj', size_hint=(None, None), size=(dp(100), dp(50)), pos_hint={'right': 1})
         self.add_multimedia_button.bind(on_release=self.add_video_note)
@@ -401,21 +396,28 @@ class AddVideoNoteScreen(Screen):
         back_video_button = Button(text='Wróć', size_hint=(None, None), size=(dp(100), dp(50)), pos_hint={'left': 1})
         back_video_button.bind(on_release=self.go_back)
 
-        layout_video.add_widget(title_video_label)
-        layout_video.add_widget(self.title_input)
-        layout_video.add_widget(button_box)
-        layout_video.add_widget(content_video_label)
-        layout_video.add_widget(self.content_video_input)
-
-        layout_video.add_widget(bottom_buttons_layout_video)
-
         bottom_buttons_layout_video.add_widget(back_video_button)
         anchor_layout_text = AnchorLayout(anchor_x='center')
         bottom_buttons_layout_video.add_widget(anchor_layout_text)
         bottom_buttons_layout_video.add_widget(self.add_multimedia_button)
 
+        layout_video.add_widget(title_video_label)
+        layout_video.add_widget(Label())
+        layout_video.add_widget(self.title_input)
+        layout_video.add_widget(Label())
+        layout_video.add_widget(add_video_button)
+        layout_video.add_widget(multimedia_label)
+        layout_video.add_widget(record_video_button)
+        layout_video.add_widget(Label())
+        layout_video.add_widget(content_video_label)
+        layout_video.add_widget(Label())
+        layout_video.add_widget(self.content_video_input)
+        
+        main_layout.add_widget(layout_video)
+        main_layout.add_widget(bottom_buttons_layout_video)
+
         self.add_text_color_background()
-        self.add_widget(layout_video)
+        self.add_widget(main_layout)
 
 
     def add_text_color_background(self):
