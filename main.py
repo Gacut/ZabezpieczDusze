@@ -378,6 +378,7 @@ class AddVideoNoteScreen(Screen):
 
         main_layout = GridLayout(cols=1, padding=[dp(10), dp(50), dp(10), dp(50)])
         layout_video = GridLayout(cols=2)
+        add_video_with_label = GridLayout(cols=2)
         bottom_buttons_layout_video = GridLayout(cols=3, size_hint_y=None, height=dp(70), spacing=dp(5))
 
         title_video_label = Label(text='Tytuł:', size_hint_x=None, width=dp(100), size_hint_y=None, height=dp(30))
@@ -401,14 +402,19 @@ class AddVideoNoteScreen(Screen):
         bottom_buttons_layout_video.add_widget(anchor_layout_text)
         bottom_buttons_layout_video.add_widget(self.add_multimedia_button)
 
+        add_video_with_label.add_widget(add_video_button)
+        add_video_with_label.add_widget(multimedia_label)
+        add_video_with_label.add_widget(record_video_button)
+        add_video_with_label.add_widget(Label())
+
         layout_video.add_widget(title_video_label)
         layout_video.add_widget(Label())
         layout_video.add_widget(self.title_input)
         layout_video.add_widget(Label())
-        layout_video.add_widget(add_video_button)
-        layout_video.add_widget(multimedia_label)
-        layout_video.add_widget(record_video_button)
+        layout_video.add_widget(add_video_with_label)
         layout_video.add_widget(Label())
+        # layout_video.add_widget(record_video_button)
+        # layout_video.add_widget(Label())
         layout_video.add_widget(content_video_label)
         layout_video.add_widget(Label())
         layout_video.add_widget(self.content_video_input)
