@@ -376,15 +376,19 @@ class AddVideoNoteScreen(Screen):
     def __init__(self, **kwargs):
         super(AddVideoNoteScreen, self).__init__(**kwargs)
 
+        options = ['Wspomnienie', 'Marzenia', 'Przeżycia', 'Opis Dnia', 'Światopogląd', 'Polityka']
+        
         main_layout = GridLayout(cols=1, padding=[dp(10), dp(50), dp(10), dp(50)])
         layout_video = GridLayout(cols=2)
         add_video_with_label = GridLayout(cols=2)
         bottom_buttons_layout_video = GridLayout(cols=3, size_hint_y=None, height=dp(70), spacing=dp(5))
+        title_layout = GridLayout(cols=2)
 
         title_video_label = Label(text='Tytuł:', size_hint_x=None, width=dp(100), size_hint_y=None, height=dp(30))
+        self.spinner = Spinner(text='Wybierz rodzaj notatki', values=options, size_hint=(None, None), size=(dp(200), dp(50)))
         self.title_input = TextInput(size_hint_y=None, height=dp(30), 
                                      size_hint_x=None, width=dp(Window.width / 2), multiline=False)
-        add_video_button = Button(text='Dodaj Wideo', size_hint=(None, None), size=(dp(100), dp(50)))
+        self.add_video_button = Button(text='Dodaj Wideo', size_hint=(None, None), size=(dp(100), dp(50)))
         multimedia_label = Label(text='Ścieżka pliku wideo:', size_hint=(None, None), size=(dp(150), dp(30)))
         record_video_button = Button(text='Nagraj wideo', size_hint=(None, None), size=(dp(100), dp(50)))
 
@@ -402,14 +406,17 @@ class AddVideoNoteScreen(Screen):
         bottom_buttons_layout_video.add_widget(anchor_layout_text)
         bottom_buttons_layout_video.add_widget(self.add_multimedia_button)
 
-        add_video_with_label.add_widget(add_video_button)
+        title_layout.add_widget(self.title_input)
+        title_layout.add_widget(self.spinner)
+
+        add_video_with_label.add_widget(self.add_video_button)
         add_video_with_label.add_widget(multimedia_label)
         add_video_with_label.add_widget(record_video_button)
         add_video_with_label.add_widget(Label())
 
         layout_video.add_widget(title_video_label)
         layout_video.add_widget(Label())
-        layout_video.add_widget(self.title_input)
+        layout_video.add_widget(title_layout)
         layout_video.add_widget(Label())
         layout_video.add_widget(add_video_with_label)
         layout_video.add_widget(Label())
@@ -431,23 +438,57 @@ class AddVideoNoteScreen(Screen):
             Color(0.027, 0.082, 0.137, 1)  # #071522
             Rectangle(pos=self.pos, size=Window.size)
 
+    def add_note_to_json(self, file_path, title, content, tag, vidpath):
+        note = {'title': title, 'content': content,'tag': tag,  'vidpath': vidpath, }
+        if vidpath == None:
+            popup = Popup(title='Błąd', content=Label(text='Dodaj wideo lub nagraj je. W przeciwnym wypadku skorzystaj z notatki textowej'),
+                        size_hint=(None, None), size=(dp(200), dp(200)))
+            popup.open()
+
+        if os.path.exists(file_path):
+            with open(file_path, 'r') as file:
+                notes = json.load(file)
+        else:
+            notes = []
+        notes.append(note)
+
+        with open(file_path, 'w') as file:
+            json.dump(notes, file)
+
+        popup = Popup(title='Sukces', content=Label(text='Notatka została dodana.'),
+                    size_hint=(None, None), size=(dp(200), dp(200)))
+        self.add_video_button.text = "Dodaj Wideo"
+        popup.open()
+
     def add_video_note(self, instance):
         title = self.title_input.text
         content = self.content_video_input.text
         popup_height = Window.height * 0.2
         popup_width = Window.width * 0.4
+        vidpath = "videos/" + str(self.add_video_button.text)
+        tag = self.spinner.text
+
+        notes_file = "notes.json"
+        popup_height = Window.height * 0.2
+        popup_width = Window.width * 0.4
 
         if title.strip() == '' or content.strip() == '':
             popup = Popup(title='Błąd', content=Label(text='Tytuł i treść notatki nie mogą być puste.'),
-                          size_hint=(None, None), size=(popup_width, popup_height))
+                        size_hint=(None, None), size=(popup_width, popup_height))
             popup.open()
+
+        if tag == 'Wybierz rodzaj notatki':
+            popup = Popup(title='Błąd', content=Label(text='Musisz wybrać rodzaj notatki'),
+                        size_hint=(None, None), size=(popup_width, popup_height))
+            popup.open()
+        
         else:
-            # Tutaj możesz umieścić kod do zapisu notatki, np. do bazy danych
+            if "Dołącz" in vidpath:
+                self.add_note_to_json(notes_file, title, content, tag)
+            else:
+                self.add_note_to_json(notes_file, title, content, tag, vidpath)
             self.title_input.text = ''
-            self.content_video_input.text = ''
-            popup = Popup(title='Sukces', content=Label(text='Notatka została dodana.'),
-                          size_hint=(None, None), size=(popup_width, popup_height))
-            popup.open()
+            self.content_video_label.text = ''
 
     def go_back(self, instance):
         self.manager.current = 'main'
