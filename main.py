@@ -420,8 +420,6 @@ class AddVideoNoteScreen(Screen):
         layout_video.add_widget(Label())
         layout_video.add_widget(add_video_with_label)
         layout_video.add_widget(Label())
-        # layout_video.add_widget(record_video_button)
-        # layout_video.add_widget(Label())
         layout_video.add_widget(content_video_label)
         layout_video.add_widget(Label())
         layout_video.add_widget(self.content_video_input)
