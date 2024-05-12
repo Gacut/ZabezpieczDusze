@@ -21,6 +21,8 @@ Python: Kivy - frontend
 # Creditsy
 Frontend (Pomoc): ChatGPT (Głównie dlatego, że nie lubię programować frontu).
 
+Inspiracja: https://en.m.wikipedia.org/wiki/Be_Right_Back
+
 Grafiki: Bing.com/create
 
 # kawakawa
