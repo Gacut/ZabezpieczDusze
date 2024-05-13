@@ -12,12 +12,14 @@ from kivy.app import App
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.metrics import dp
-from kivy.uix.filechooser import FileChooserListView
+from kivy.uix.filechooser import FileChooserIconView
+from kivymd.uix.filemanager import MDFileManager
 from shutil import copyfile
 from kivy.uix.image import Image
 from kivy.uix.spinner import Spinner
 import json
 import os
+import platform
 
 
 layout = GridLayout(cols=1, spacing=dp(10), padding=[dp(10), dp(20)])  # Ustawiamy margines górny na 20 pikseli
@@ -259,7 +261,7 @@ class AddNoteScreen(Screen):
         title_label = Label(text='Tytuł notatki:',size_hint_x=None, width=dp(100), size_hint_y=None, height=dp(30))
         
         self.title_input = TextInput(size_hint_y=None, height=dp(30), 
-                                     size_hint_x=None, width=dp(Window.width / 2), multiline=False)
+                                     size_hint_x=None, width=(Window.width - dp(220)), multiline=False)
 
         content_label = Label(text='Treść notatki:', size_hint_x=None, width=dp(100), size_hint_y=None, height=dp(30))
         self.content_input = TextInput(size_hint_x=None, width=(Window.width - dp(20)), size_hint_y=None, height=(Window.height - dp(250)))
@@ -302,7 +304,7 @@ class AddNoteScreen(Screen):
         self.picture_button.bind(on_release=self.choose_picture)
 
     def choose_picture(self, instance):
-        file_chooser = FileChooserListView()
+        file_chooser = FileChooserIconView()
         file_chooser.bind(on_submit=self.copy_picture)
         popup = Popup(title="Wybierz zdjęcie", content=file_chooser, size_hint=(None, None), size=(400, 400))
         popup.open()
