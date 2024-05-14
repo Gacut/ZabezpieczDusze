@@ -13,7 +13,6 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.metrics import dp
 from kivy.uix.filechooser import FileChooserIconView
-from kivymd.uix.filemanager import MDFileManager
 from shutil import copyfile
 from kivy.uix.image import Image
 from kivy.uix.spinner import Spinner
