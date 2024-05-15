@@ -18,7 +18,6 @@ from kivy.uix.image import Image
 from kivy.uix.spinner import Spinner
 import json
 import os
-import platform
 
 
 layout = GridLayout(cols=1, spacing=dp(10), padding=[dp(10), dp(20)])  # Ustawiamy margines górny na 20 pikseli
