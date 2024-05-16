@@ -252,9 +252,9 @@ class AddNoteScreen(Screen):
         options = ['Wspomnienie', 'Marzenia', 'Przeżycia', 'Opis Dnia', 'Światopogląd', 'Polityka']
         
         #layouty
-        title_layout = GridLayout(cols=2)
-        layout = GridLayout(cols=1, padding=[dp(10), dp(50), dp(10), dp(50)])
-        bottom_buttons_layout_text = GridLayout(cols=4, size_hint_max=(Window.width, None))
+        title_layout = GridLayout(cols=2, size_hint_y=dp(20))
+        layout = GridLayout(cols=1, padding=[dp(10), dp(20), dp(10), dp(50)])
+        bottom_buttons_layout_text = GridLayout(cols=4, size_hint_y=None, height=dp(60), spacing=dp(5))
         
         title_label = Label(text='Tytuł notatki:',size_hint_x=None, width=dp(100), size_hint_y=None, height=dp(30))
         
@@ -287,6 +287,7 @@ class AddNoteScreen(Screen):
         title_layout.add_widget(title_label)
         title_layout.add_widget(Label())
         title_layout.add_widget(self.title_input)
+        title_layout.add_widget(Label())
         title_layout.add_widget(self.spinner)
         layout.add_widget(title_layout)
         layout.add_widget(Label())
@@ -378,13 +379,13 @@ class AddVideoNoteScreen(Screen):
 
         options = ['Wspomnienie', 'Marzenia', 'Przeżycia', 'Opis Dnia', 'Światopogląd', 'Polityka']
         
-        main_layout = GridLayout(cols=1, padding=[dp(10), dp(50), dp(10), dp(50)])
+        main_layout = GridLayout(cols=1, padding=[dp(10), dp(20), dp(10), dp(50)])
         layout_video = GridLayout(cols=2)
         add_video_with_label = GridLayout(cols=2)
         bottom_buttons_layout_video = GridLayout(cols=3, size_hint_y=None, height=dp(70), spacing=dp(5))
         title_layout = GridLayout(cols=2)
 
-        title_video_label = Label(text='Tytuł:', size_hint_x=None, width=dp(100), size_hint_y=None, height=dp(30))
+        title_video_label = Label(text='Tytuł:', size_hint_x=None, width=dp(100), size_hint_y=None, height=dp(10))
         self.spinner = Spinner(text='Wybierz rodzaj notatki', values=options, size_hint=(None, None), size=(dp(200), dp(50)))
         self.title_input = TextInput(size_hint_y=None, height=dp(30), 
                                      size_hint_x=None, width=dp(Window.width / 2), multiline=False)
@@ -393,7 +394,7 @@ class AddVideoNoteScreen(Screen):
         record_video_button = Button(text='Nagraj wideo', size_hint=(None, None), size=(dp(100), dp(50)))
 
         content_video_label = Label(text='Treść notatki:', size_hint_x=None, width=100, size_hint_y=None, height=30)
-        self.content_video_input = TextInput(size_hint_x=None, width=(Window.width - dp(20)), size_hint_y=None, height=(Window.height - dp(400)))
+        self.content_video_input = TextInput(size_hint_x=None, width=(Window.width - dp(20)), size_hint_y=None, height=(Window.height - dp(410)))
 
         self.add_multimedia_button = Button(text='Dodaj', size_hint=(None, None), size=(dp(100), dp(50)), pos_hint={'right': 1})
         self.add_multimedia_button.bind(on_release=self.add_video_note)
@@ -502,7 +503,7 @@ class AddAudioScreen(Screen):
         bottom_buttons_layout_audio = GridLayout(cols=3, size_hint_y=None, height=dp(70), spacing=dp(5))
         title_layout = GridLayout(cols=2)
         record_buttons_layout = GridLayout(cols=4, row_default_height=3, row_force_default=True)
-        layout = GridLayout(cols=1, spacing=-20, padding=40)
+        layout = GridLayout(cols=1, spacing=-20, padding=[dp(10), dp(80), dp(10), dp(50)])
 
         add_audio_button = Button(text='Dodaj', size_hint=(None, None), size=(dp(100), dp(50)), pos_hint={'right': 1})
 
