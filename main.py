@@ -16,6 +16,9 @@ from kivy.uix.filechooser import FileChooserIconView
 from shutil import copyfile
 from kivy.uix.image import Image
 from kivy.uix.spinner import Spinner
+import threading
+import sounddevice as sd
+import numpy as np
 import json
 import os
 
@@ -498,38 +501,40 @@ class AddAudioScreen(Screen):
     def __init__(self, **kwargs):
         super(AddAudioScreen, self).__init__(**kwargs)
 
-        #layouty
+        self.is_recording = False
+        self.recording_thread = None
+        self.audio_data = []
 
+        # Layouty
         bottom_buttons_layout_audio = GridLayout(cols=3, size_hint_y=None, height=dp(70), spacing=dp(5))
         title_layout = GridLayout(cols=2)
         record_buttons_layout = GridLayout(cols=4, row_default_height=3, row_force_default=True)
         layout = GridLayout(cols=1, spacing=-20, padding=[dp(10), dp(80), dp(10), dp(50)])
 
         add_audio_button = Button(text='Dodaj', size_hint=(None, None), size=(dp(100), dp(50)), pos_hint={'right': 1})
-
         back_audio_button = Button(text='Wróć', size_hint=(None, None), size=(dp(100), dp(50)), pos_hint={'left': 1})
         back_audio_button.bind(on_release=self.go_back)
 
-
         title_label = Label(text='Tytuł notatki:', size_hint=(None, None), height=dp(30))
-        title_input = TextInput(size_hint=(0.7, None), height=dp(30), multiline=False)
+        self.title_input = TextInput(size_hint=(0.7, None), height=dp(30), multiline=False)
 
-        record_button = Button(text='Nagraj', size_hint=(1, None), size=(dp(100), dp(50)))
-        stop_button = Button(text='Zatrzymaj', size_hint=(1, None), size=(dp(100), dp(50)))
+        self.record_button = Button(text='Nagraj', size_hint=(1, None), size=(dp(100), dp(50)))
+        self.record_button.bind(on_release=self.start_recording)
+        self.stop_button = Button(text='Zatrzymaj', size_hint=(1, None), size=(dp(100), dp(50)))
+        self.stop_button.bind(on_release=self.stop_recording)
 
         bottom_buttons_layout_audio.add_widget(back_audio_button)
         bottom_buttons_layout_audio.add_widget(Label(size_hint=(1, None)))
         bottom_buttons_layout_audio.add_widget(add_audio_button)
 
         title_layout.add_widget(title_label)
-        title_layout.add_widget(title_input)
+        title_layout.add_widget(self.title_input)
 
         record_buttons_layout.add_widget(Label())
-        record_buttons_layout.add_widget(record_button)
-        record_buttons_layout.add_widget(stop_button)
+        record_buttons_layout.add_widget(self.record_button)
+        record_buttons_layout.add_widget(self.stop_button)
         record_buttons_layout.add_widget(Label())
 
-    
         layout.add_widget(title_layout)
         layout.add_widget(record_buttons_layout)
         layout.add_widget(bottom_buttons_layout_audio)
@@ -545,6 +550,27 @@ class AddAudioScreen(Screen):
     def go_back(self, instance):
         self.manager.current = 'main'
         update_main_screen_notes()
+
+    def start_recording(self, instance):
+        if not self.is_recording:
+            self.is_recording = True
+            self.audio_data = []
+            self.recording_thread = threading.Thread(target=self.record)
+            self.recording_thread.start()
+
+    def record(self):
+        with sd.InputStream(callback=self.audio_callback):
+            while self.is_recording:
+                sd.sleep(100)
+
+    def stop_recording(self, instance):
+        if self.is_recording:
+            self.is_recording = False
+            self.recording_thread.join()
+            self.save_audio()
+
+    def save_audio(self):
+        audio_array = np.concatenate(self.audio_data, axis=0)
 
 #ekran widoku notatki
 class NoteDetailsScreen(Screen):
