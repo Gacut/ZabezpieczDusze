@@ -4,7 +4,6 @@ from kivy.uix.button import Button
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
-from kivy.effects.scroll import ScrollEffect
 from kivy.uix.textinput import TextInput
 from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle, InstructionGroup, Line
@@ -16,9 +15,9 @@ from kivy.uix.filechooser import FileChooserIconView
 from shutil import copyfile
 from kivy.uix.image import Image
 from kivy.uix.spinner import Spinner
-import threading
-import sounddevice as sd
-import numpy as np
+# import threading
+# import sounddevice as sd
+# import numpy as np
 import json
 import os
 
@@ -519,9 +518,9 @@ class AddAudioScreen(Screen):
         self.title_input = TextInput(size_hint=(0.7, None), height=dp(30), multiline=False)
 
         self.record_button = Button(text='Nagraj', size_hint=(1, None), size=(dp(100), dp(50)))
-        self.record_button.bind(on_release=self.start_recording)
+        # self.record_button.bind(on_release=self.start_recording)
         self.stop_button = Button(text='Zatrzymaj', size_hint=(1, None), size=(dp(100), dp(50)))
-        self.stop_button.bind(on_release=self.stop_recording)
+        # self.stop_button.bind(on_release=self.stop_recording)
 
         bottom_buttons_layout_audio.add_widget(back_audio_button)
         bottom_buttons_layout_audio.add_widget(Label(size_hint=(1, None)))
@@ -551,26 +550,26 @@ class AddAudioScreen(Screen):
         self.manager.current = 'main'
         update_main_screen_notes()
 
-    def start_recording(self, instance):
-        if not self.is_recording:
-            self.is_recording = True
-            self.audio_data = []
-            self.recording_thread = threading.Thread(target=self.record)
-            self.recording_thread.start()
+    # def start_recording(self, instance):
+    #     if not self.is_recording:
+    #         self.is_recording = True
+    #         self.audio_data = []
+    #         self.recording_thread = threading.Thread(target=self.record)
+    #         self.recording_thread.start()
 
-    def record(self):
-        with sd.InputStream(callback=self.audio_callback):
-            while self.is_recording:
-                sd.sleep(100)
+    # def record(self):
+    #     with sd.InputStream(callback=self.audio_callback):
+    #         while self.is_recording:
+    #             sd.sleep(100)
 
-    def stop_recording(self, instance):
-        if self.is_recording:
-            self.is_recording = False
-            self.recording_thread.join()
-            self.save_audio()
+    # def stop_recording(self, instance):
+    #     if self.is_recording:
+    #         self.is_recording = False
+    #         self.recording_thread.join()
+    #         self.save_audio()
 
-    def save_audio(self):
-        audio_array = np.concatenate(self.audio_data, axis=0)
+    # def save_audio(self):
+    #     audio_array = np.concatenate(self.audio_data, axis=0)
 
 #ekran widoku notatki
 class NoteDetailsScreen(Screen):
