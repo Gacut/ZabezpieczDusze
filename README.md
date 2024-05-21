@@ -11,7 +11,7 @@ Wszystko to miałoby formę chatbota wytrenowanego na podstawie danych z Zabezpi
 Ale to dopiero, gdy opanuję temat związany z AI chatbotami i modelami na podstawie wprowadzanych danych.
 
 
-Aplikacja wyłącznie na androida
+Aplikacja wyłącznie na androida.
 
 Podgląd aplikacji (WIP):
 
