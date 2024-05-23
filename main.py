@@ -550,6 +550,8 @@ class AddAudioScreen(Screen):
         self.manager.current = 'main'
         update_main_screen_notes()
 
+    #Coś nie działa. Sprawdzić jak debugger na androidzie zacznie działać
+    
     # def start_recording(self, instance):
     #     if not self.is_recording:
     #         self.is_recording = True
