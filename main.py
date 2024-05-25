@@ -387,10 +387,10 @@ class AddVideoNoteScreen(Screen):
         bottom_buttons_layout_video = GridLayout(cols=3, size_hint_y=None, height=dp(70), spacing=dp(5))
         title_layout = GridLayout(cols=2)
 
-        title_video_label = Label(text='Tytuł:', size_hint_x=None, width=dp(100), size_hint_y=None, height=dp(10))
+        title_video_label = Label(text='Tytuł:', size_hint_x=None, width=dp(50), size_hint_y=None, height=dp(10), padding=[dp(20), dp(50), dp(20), dp(80)])
         self.spinner = Spinner(text='Wybierz rodzaj notatki', values=options, size_hint=(None, None), size=(dp(200), dp(50)))
         self.title_input = TextInput(size_hint_y=None, height=dp(30), 
-                                     size_hint_x=None, width=dp(Window.width / 2), multiline=False)
+                                     size_hint_x=None, width=dp(Window.width / 2), multiline=False, padding=[dp(20), dp(50), dp(20), dp(80)])
         self.add_video_button = Button(text='Dodaj Wideo', size_hint=(None, None), size=(dp(100), dp(50)))
         multimedia_label = Label(text='Ścieżka pliku wideo:', size_hint=(None, None), size=(dp(150), dp(30)))
         record_video_button = Button(text='Nagraj wideo', size_hint=(None, None), size=(dp(100), dp(50)))
@@ -409,20 +409,23 @@ class AddVideoNoteScreen(Screen):
         bottom_buttons_layout_video.add_widget(anchor_layout_text)
         bottom_buttons_layout_video.add_widget(self.add_multimedia_button)
 
-        title_layout.add_widget(self.title_input)
-        title_layout.add_widget(self.spinner)
-
         add_video_with_label.add_widget(self.add_video_button)
         add_video_with_label.add_widget(multimedia_label)
         add_video_with_label.add_widget(record_video_button)
         add_video_with_label.add_widget(Label())
 
+        title_layout.add_widget(self.title_input)
+        title_layout.add_widget(Label())
+        title_layout.add_widget(self.spinner)
+        title_layout.add_widget(Label())
+        title_layout.add_widget(add_video_with_label)
+
         layout_video.add_widget(title_video_label)
         layout_video.add_widget(Label())
         layout_video.add_widget(title_layout)
         layout_video.add_widget(Label())
-        layout_video.add_widget(add_video_with_label)
-        layout_video.add_widget(Label())
+        # layout_video.add_widget(add_video_with_label)
+        # layout_video.add_widget(Label())
         layout_video.add_widget(content_video_label)
         layout_video.add_widget(Label())
         layout_video.add_widget(self.content_video_input)
