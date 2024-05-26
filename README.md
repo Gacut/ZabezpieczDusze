@@ -28,6 +28,7 @@ Inspiracja: https://en.m.wikipedia.org/wiki/Be_Right_Back
 
 Grafika: Bing.com/create
 
+
 # kawakawa
 https://ko-fi.com/gacut/goal?g=0
 
