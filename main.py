@@ -186,7 +186,7 @@ class MainScreen(Screen):
         add_video_button = Button(size_hint_y=None, height=dp(80), background_normal='grafiki/dodajnotatkewideo.png', background_down='grafiki/dodajnotatkewideo2.png')
         add_video_button.bind(on_release=self.add_video_and_close_popup)
         add_audio_button = Button(text='Dodaj notatkę audio', size_hint_y=None, height=80)
-        add_video_button.bind(on_release=self.add_audio_and_close_popup)
+        add_audio_button.bind(on_release=self.add_audio_and_close_popup)
         close_button = Button(size_hint=(None, None), size=(dp(80), dp(50)), background_normal='grafiki/zamknij.png', background_down='grafiki/zamknij2.png')
         close_button_bar_add = BoxLayout(orientation='horizontal')
 
